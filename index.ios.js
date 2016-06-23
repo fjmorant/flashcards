@@ -1,3 +1,3 @@
-import initApp from './src/initApp';
+import initApp from './src/App';
 
 initApp();
