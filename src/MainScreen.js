@@ -4,12 +4,6 @@ import {
   Text,
   View
 } from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Title,
-} from 'native-base';
 
 class FlashCards extends Component {
 
@@ -40,13 +34,11 @@ class FlashCards extends Component {
 
   render() {
     return (
-      <Container>
-        <Content>
-              <Text>
-                Main Screen
-              </Text>
-        </Content>
-      </Container>
+      <View>
+          <Text>
+            Main Screen
+          </Text>
+      </View>
     );
   }
 }
