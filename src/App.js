@@ -3,10 +3,11 @@ import { Provider } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 import thunk from 'redux-thunk';
 import flashcards from './flashcards/flashcardsDuck';
+import addFlashCard from './flashcards/addFlashCardDuck';
 import { registerScreens } from './screens';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const reducer = combineReducers({flashcards});
+const reducer = combineReducers({flashcards, addFlashCard});
 const store = createStoreWithMiddleware(reducer);
 
 export default () => {

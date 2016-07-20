@@ -1,10 +1,18 @@
 import React from 'react';
 import {
-  StyleSheet,
-  Text,
   View,
   TextInput,
+  StyleSheet,
 } from 'react-native';
+
+const styles = StyleSheet.create({
+  text: {
+    flex: 1,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 5,
+  }
+});
 
 export default ({
   value,
@@ -14,7 +22,8 @@ export default ({
 }) => (
   <TextInput
     {...props}
-    style={[{flex: 1, borderColor: 'gray', borderWidth: 1, padding: 5}, props.style]}
+    multiline
+    style={[styles.text, props.style]}
     onChangeText={onChangeText}
     placeholder={placeholder}
     value={value}/>
