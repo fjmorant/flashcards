@@ -64,7 +64,10 @@ class AddFlashCardScreen extends Component {
         <Button
             disabled={!this.shouldEnableSaveButton()}
             height={40}
-            onPress={this.props.saveFlashCard}
+            onPress={() => {
+              this.props.saveFlashCard();
+              this.props.navigator.pop();
+            }}
             title='Save'/>
       </View>
     );
