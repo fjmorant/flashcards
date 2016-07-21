@@ -1,32 +1,44 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import {Container, Header, Content, Footer, Title} from 'native-base';
 
 class FlashCards extends Component {
+
+  static navigatorButtons = {
+    rightButtons: [
+      {
+        title: 'Add',
+        id: 'addFlashCard',
+        showAsAction: 'ifRoom'
+      },
+    ]
+  }
+
+  constructor(props) {
+    super(props);
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+  }
+
+  onNavigatorEvent(event) {
+      if (event.id == 'addFlashCard') {
+        this.props.navigator.push({
+          screen: 'com.flashcards.AddFlashCardScreen',
+          title: 'Add FlashCard',
+          animated: true, // does the push have transition animation or does it happen immediately (optional)
+        });
+      }
+  }
+
   render() {
     return (
-      <Container>
-        <Content>
-              <Text>
-                Hello Wooooorld
-              </Text>
-        </Content>
-
-        <Footer>
-            <Title>Footer</Title>
-        </Footer>
-      </Container>
+      <View>
+          <Text>
+            Main Screen
+          </Text>
+      </View>
     );
   }
 }
@@ -36,7 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'rgb(245, 252, 255)',
   },
   welcome: {
     fontSize: 20,
@@ -45,7 +57,7 @@ const styles = StyleSheet.create({
   },
   instructions: {
     textAlign: 'center',
-    color: '#333333',
+    color: 'rgb(51, 51, 51)',
     marginBottom: 5,
   },
 });
