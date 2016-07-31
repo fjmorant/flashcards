@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
   View
 } from 'react-native';
+import List from './common/List';
+import {fromJS} from 'immutable';
+import {connect} from 'react-redux';
 
 class FlashCards extends Component {
 
@@ -20,6 +23,7 @@ class FlashCards extends Component {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
+    this.renderFlashCard = this.renderFlashCard.bind(this);
   }
 
   onNavigatorEvent(event) {
@@ -27,17 +31,29 @@ class FlashCards extends Component {
         this.props.navigator.push({
           screen: 'com.flashcards.AddFlashCardScreen',
           title: 'Add FlashCard',
-          animated: true, // does the push have transition animation or does it happen immediately (optional)
+          animated: true,
         });
       }
+  }
+
+  renderFlashCard(flashcard) {
+    console.log('flashcard: ', flashcard);
+    return (
+      <View style={{padding: 5}}>
+        <Text style={{color: 'rgb(0,0,0)'}}>
+          {flashcard.get('flashCardName')}
+        </Text>
+      </View>
+    );
   }
 
   render() {
     return (
       <View>
-          <Text>
-            Main Screen
-          </Text>
+          <List
+            style={{flex: 1}}
+            items={this.props.flashcards}
+            renderItem={this.renderFlashCard}/>
       </View>
     );
   }
@@ -62,4 +78,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlashCards;
+export default connect(state => ({
+    flashcards: state.flashcards.get('flashcards'),
+  }),
+  null,
+)(FlashCards);

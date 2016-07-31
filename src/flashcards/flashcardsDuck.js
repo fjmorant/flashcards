@@ -12,12 +12,7 @@ export const addNewFlashCard = (flashcard) => {
 };
 
 export default handleActions({
-  [ADD_FLASH_CARD]: (state, {payload}) => {
-    console.log('Previous State: ', state.toJS());
-    const newState = state.set('flashcards', state.get('flashcards').push(payload));
-    console.log('New State: ', newState.toJS());
-    return newState;
-  },
+  [ADD_FLASH_CARD]: (state, {payload}) => state.set('flashcards', state.get('flashcards').push(payload)),
 }, fromJS({
   flashcards: []
 }));
