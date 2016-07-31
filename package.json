@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "lint": "eslint --ext .js ./src/ index.ios.js"
   },
   "dependencies": {
     "react": "15.2.1",
@@ -15,5 +16,10 @@
     "redux-actions": "0.10.1",
     "redux-thunk": "2.1.0",
     "immutable": "3.8.1"
+  },
+  "devDependencies": {
+    "eslint": "3.2.0",
+    "eslint-plugin-react": "5.2.2",
+    "eslint-plugin-react-native": "1.2.0"
   }
 }

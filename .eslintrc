@@ -1,0 +1,25 @@
+{
+  "plugins": [
+    "react",
+    "react-native"
+  ],
+  "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+  },
+  "rules": {
+    "quotes": [2, "single", "avoid-escape"],
+    "react-native/no-unused-styles": 2,
+    "react-native/split-platform-components": 2,
+    "comma-dangle": 0,
+    "no-render-return-value": 0,
+    "react/jsx-sort-props": 2,
+    "react/sort-prop-types": 2,
+    "react/no-render-return-value": 0,
+    "react/jsx-indent-props": [2, 4],
+  },
+  "extends": ["eslint:recommended", "plugin:react/recommended"]
+}
