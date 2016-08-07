@@ -7,6 +7,7 @@ import {
 import List from './common/List';
 import {fromJS} from 'immutable';
 import {connect} from 'react-redux';
+import {loadFlashCardsFromPersistance} from './flashcards/flashcardsDuck';
 
 class FlashCards extends Component {
 
@@ -24,6 +25,10 @@ class FlashCards extends Component {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     this.renderFlashCard = this.renderFlashCard.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.loadFlashCardsFromPersistance();
   }
 
   onNavigatorEvent(event) {
@@ -81,5 +86,7 @@ const styles = StyleSheet.create({
 export default connect(state => ({
     flashcards: state.flashcards.get('flashcards'),
   }),
-  null,
+  (dispatch) => ({
+    loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),
+  }),
 )(FlashCards);

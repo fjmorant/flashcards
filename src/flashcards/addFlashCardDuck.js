@@ -45,5 +45,5 @@ export default handleActions({
   [SET_FLASHCARD_NAME]: (state, {payload}) => state.set('flashCardName', payload),
   [SET_FLASHCARD_MEANING]: (state, {payload}) => state.set('flashCardMeaning', payload),
   [SET_FLASHCARD_EXAMPLE]: (state, {payload}) => state.set('flashCardExample', payload),
-  [CLEAR_FLASHCARD]: (state) => defaultState,
+  [CLEAR_FLASHCARD]: () => defaultState,
 }, defaultState);

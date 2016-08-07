@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, PropTypes} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,19 +17,10 @@ import {connect} from 'react-redux';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(245, 252, 255)',
+    padding: 10
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'rgb(51, 51, 51)',
-    marginBottom: 5,
+  input: {
+    margin: 8,
   },
 });
 
@@ -41,24 +32,24 @@ class AddFlashCardScreen extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, padding: 10}}>
+      <View style={styles.container}>
         <Input
-            style={{margin: 8}}
             height={35}
             onChangeText={this.props.changeFlashCardName}
             placeholder='Type word you want to remember'
             returnKeyType='next'
+            style={styles.input}
             value={this.props.flashCardName}/>
         <InputArea
             onChangeText={this.props.changeFlashCardMeaning}
-            style={{margin: 8}}
             placeholder='Explanation of the word'
             returnKeyType='next'
+            style={styles.input}
             value={this.props.flashCardMeaning}/>
         <InputArea
             onChangeText={this.props.changeFlashCardExample}
-            style={{margin: 8}}
             placeholder='Example of your word'
+            style={styles.input}
             value={this.props.flashCardExample}/>
         <Button
             disabled={!this.shouldEnableSaveButton()}
@@ -72,6 +63,17 @@ class AddFlashCardScreen extends Component {
     );
   }
 }
+
+AddFlashCardScreen.propTypes = {
+  changeFlashCardExample: PropTypes.func,
+  changeFlashCardMeaning: PropTypes.func,
+  changeFlashCardName: PropTypes.func,
+  flashCardExample: PropTypes.string,
+  flashCardMeaning: PropTypes.string,
+  flashCardName: PropTypes.string,
+  navigator: PropTypes.object,
+  saveFlashCard: PropTypes.func,
+};
 
 export default connect(state => ({
     flashCardName: state.addFlashCard.get('flashCardName'),
