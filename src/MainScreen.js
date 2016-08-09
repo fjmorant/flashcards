@@ -9,6 +9,25 @@ import {fromJS} from 'immutable';
 import {connect} from 'react-redux';
 import {loadFlashCardsFromPersistance} from './flashcards/flashcardsDuck';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgb(245, 252, 255)',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: 'rgb(51, 51, 51)',
+    marginBottom: 5,
+  },
+});
+
 class FlashCards extends Component {
 
   static navigatorButtons = {
@@ -42,11 +61,16 @@ class FlashCards extends Component {
   }
 
   renderFlashCard(flashcard) {
-    console.log('flashcard: ', flashcard);
     return (
-      <View style={{padding: 5}}>
+      <View style={{padding: 8}}>
         <Text style={{color: 'rgb(0,0,0)'}}>
-          {flashcard.get('flashCardName')}
+          Name : {flashcard.get('flashCardName')}
+        </Text>
+        <Text style={{color: 'rgb(0,0,0)'}}>
+          Meaning : {flashcard.get('flashCardMeaning')}
+        </Text>
+        <Text style={{color: 'rgb(0,0,0)'}}>
+          Example : {flashcard.get('flashCardExample')}
         </Text>
       </View>
     );
@@ -56,32 +80,12 @@ class FlashCards extends Component {
     return (
       <View>
           <List
-            style={{flex: 1}}
             items={this.props.flashcards}
             renderItem={this.renderFlashCard}/>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(245, 252, 255)',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'rgb(51, 51, 51)',
-    marginBottom: 5,
-  },
-});
 
 export default connect(state => ({
     flashcards: state.flashcards.get('flashcards'),

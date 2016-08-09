@@ -1,27 +1,5 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  ListView
-} from 'react-native';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(245, 252, 255)',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'rgb(51, 51, 51)',
-    marginBottom: 5,
-  },
-});
+import {ListView, View} from 'react-native';
 
 class List extends Component {
 
@@ -33,6 +11,8 @@ class List extends Component {
     this.state = {
       dataSource: dataSource.cloneWithRows(props.items.toArray()),
     };
+
+    this.renderSeparator = this.renderSeparator.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -41,11 +21,19 @@ class List extends Component {
         })
   }
 
+  renderSeparator() {
+    return (
+      <View style={{height: 1, backgroundColor: 'rgb(128, 128, 128)'}}/>
+    );
+  }
+
   render() {
     return (
       <ListView
-         dataSource={this.state.dataSource}
-         renderRow={this.props.renderItem}/>
+          dataSource={this.state.dataSource}
+          enableEmptySections
+          renderRow={this.props.renderItem}
+          renderSeparator={this.renderSeparator}/>
      );
   }
 }
