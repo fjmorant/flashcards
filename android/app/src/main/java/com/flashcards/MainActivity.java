@@ -1,8 +1,8 @@
 package com.flashcards;
 
-import com.reactnativenavigation.activities.RootActivity;
+import com.facebook.react.ReactActivity;
 
-public class MainActivity extends RootActivity {
+public class MainActivity extends ReactActivity {
 
     /**
      * Returns the name of the main component registered from JavaScript.
