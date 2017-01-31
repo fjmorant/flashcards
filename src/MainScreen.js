@@ -8,7 +8,8 @@ import {
 import List from './common/List';
 import {fromJS} from 'immutable';
 import {connect} from 'react-redux';
-import {loadFlashCardsFromPersistance} from './flashcards/flashcardsDuck';
+import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcards/flashcardsDuck'
+import Swipeout from 'react-native-swipeout'
 
 const styles = StyleSheet.create({
   container: {
@@ -54,18 +55,30 @@ class FlashCards extends Component {
   }
 
   renderFlashCard(flashcard) {
+    const swipeoutBtns = [
+      {
+        text: 'Delete',
+        backgroundColor: 'red',
+        onPress: () => this.props.deleteFlashCard(flashcard.get('id')),
+      }
+    ]
+
     return (
-      <View style={{padding: 8}}>
-        <Text style={{color: 'rgb(0,0,0)'}}>
-          Name : {flashcard.get('flashCardName')}
-        </Text>
-        <Text style={{color: 'rgb(0,0,0)'}}>
-          Meaning : {flashcard.get('flashCardMeaning')}
-        </Text>
-        <Text style={{color: 'rgb(0,0,0)'}}>
-          Example : {flashcard.get('flashCardExample')}
-        </Text>
-      </View>
+      <Swipeout
+          autoClose
+          right={swipeoutBtns}>
+        <View style={{padding: 8}}>
+          <Text style={{color: 'rgb(0,0,0)'}}>
+            Name : {flashcard.get('flashCardName')}
+          </Text>
+          <Text style={{color: 'rgb(0,0,0)'}}>
+            Meaning : {flashcard.get('flashCardMeaning')}
+          </Text>
+          <Text style={{color: 'rgb(0,0,0)'}}>
+            Example : {flashcard.get('flashCardExample')}
+          </Text>
+        </View>
+      </Swipeout>
     );
   }
 
@@ -85,5 +98,6 @@ export default connect(state => ({
   }),
   (dispatch) => ({
     loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),
+    deleteFlashCard: (id) => dispatch(deleteFlashCard(id)),
   }),
 )(FlashCards);
