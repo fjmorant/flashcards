@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
 } from 'react-native';
 import List from './common/List';
 import {fromJS} from 'immutable';
@@ -26,23 +27,12 @@ const styles = StyleSheet.create({
     color: 'rgb(51, 51, 51)',
     marginBottom: 5,
   },
-});
+})
 
 class FlashCards extends Component {
 
-  static navigatorButtons = {
-    rightButtons: [
-      {
-        title: 'Add',
-        id: 'addFlashCard',
-        showAsAction: 'ifRoom'
-      },
-    ]
-  }
-
   constructor(props) {
     super(props);
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this));
     this.renderFlashCard = this.renderFlashCard.bind(this);
   }
 
@@ -50,14 +40,17 @@ class FlashCards extends Component {
     this.props.loadFlashCardsFromPersistance();
   }
 
-  onNavigatorEvent(event) {
-      if (event.id == 'addFlashCard') {
-        this.props.navigator.push({
-          screen: 'com.flashcards.AddFlashCardScreen',
-          title: 'Add FlashCard',
-          animated: true,
-        });
-      }
+  static navigationOptions = {
+    title: 'Flash Cards',
+    header: ({navigate, state}) => {
+      let right = (
+        <Button
+          title={'Add'}
+          onPress={() => navigate('Add')}
+        />
+      )
+      return {right}
+    },
   }
 
   renderFlashCard(flashcard) {

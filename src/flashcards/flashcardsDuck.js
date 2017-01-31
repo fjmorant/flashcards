@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import {fromJS} from 'immutable';
+import {Stack, Map, fromJS} from 'immutable';
 import {AsyncStorage} from 'react-native';
 
 const ADD_FLASH_CARD = 'ADD_FLASH_CARD';
@@ -14,8 +14,8 @@ const saveFlashCards = (flashcards) => {
 
 export const loadFlashCardsFromPersistance = () => {
   return (dispatch) => {
-      AsyncStorage.getItem('flashcards').then((flashcards) => {
-        dispatch(loadFlashCards(fromJS(JSON.parse(flashcards) || [])));
+      AsyncStorage.getItem('flashcards').then((flashcards = '') => {
+        dispatch(loadFlashCards(Stack(fromJS(JSON.parse(flashcards)))))
       }).catch((error) => console.log(error));
   };
 };
@@ -30,6 +30,6 @@ export const addNewFlashCard = (flashcard) => {
 export default handleActions({
   [ADD_FLASH_CARD]: (state, {payload}) => state.set('flashcards', state.get('flashcards').push(payload)),
   [LOAD_FLASH_CARDS]: (state, {payload}) => state.set('flashcards', payload),
-}, fromJS({
-  flashcards: []
+}, Map({
+  flashcards: Stack([])
 }));

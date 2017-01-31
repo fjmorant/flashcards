@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
 
 class AddFlashCardScreen extends Component {
 
+  static navigationOptions = {
+    title: 'Add Flash Cards',
+    header: {
+      right: null,
+    }
+  }
+
   shouldEnableSaveButton() {
     return this.props.flashCardName && this.props.flashCardMeaning && this.props.flashCardExample;
   }
@@ -55,8 +62,8 @@ class AddFlashCardScreen extends Component {
             disabled={!this.shouldEnableSaveButton()}
             height={40}
             onPress={() => {
-              this.props.saveFlashCard();
-              this.props.navigator.pop();
+              this.props.saveFlashCard()
+              this.props.navigation.goBack()
             }}
             title='Save'/>
       </View>
@@ -84,6 +91,8 @@ export default connect(state => ({
     changeFlashCardName: (text) => dispatch(changeFlashCardName(text)),
     changeFlashCardMeaning: (text) => dispatch(changeFlashCardMeaning(text)),
     changeFlashCardExample: (text) => dispatch(changeFlashCardExample(text)),
-    saveFlashCard: () => dispatch(saveFlashCard()),
+    saveFlashCard: () => {
+      dispatch(saveFlashCard())
+    },
   })
 )(AddFlashCardScreen);
