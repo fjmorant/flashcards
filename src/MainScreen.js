@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import List from './common/List';
 import {fromJS} from 'immutable';
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
 class FlashCards extends Component {
 
   constructor(props) {
-    super(props);
-    this.renderFlashCard = this.renderFlashCard.bind(this);
+    super(props)
+    this.renderFlashCard = this.renderFlashCard.bind(this)
   }
 
   componentDidMount() {
@@ -67,17 +68,19 @@ class FlashCards extends Component {
       <Swipeout
           autoClose
           right={swipeoutBtns}>
-        <View style={{padding: 8}}>
-          <Text style={{color: 'rgb(0,0,0)'}}>
-            Name : {flashcard.get('flashCardName')}
-          </Text>
-          <Text style={{color: 'rgb(0,0,0)'}}>
-            Meaning : {flashcard.get('flashCardMeaning')}
-          </Text>
-          <Text style={{color: 'rgb(0,0,0)'}}>
-            Example : {flashcard.get('flashCardExample')}
-          </Text>
-        </View>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Add', {id: flashcard.get('id')})}>
+            <View style={{padding: 8}}>
+              <Text style={{color: 'rgb(0,0,0)'}}>
+                Name : {flashcard.get('flashCardName')}
+              </Text>
+              <Text style={{color: 'rgb(0,0,0)'}}>
+                Meaning : {flashcard.get('flashCardMeaning')}
+              </Text>
+              <Text style={{color: 'rgb(0,0,0)'}}>
+                Example : {flashcard.get('flashCardExample')}
+              </Text>
+            </View>
+          </TouchableOpacity>
       </Swipeout>
     );
   }
@@ -94,7 +97,7 @@ class FlashCards extends Component {
 }
 
 export default connect(state => ({
-    flashcards: state.flashcards.get('flashcards'),
+    flashcards: state.flashcards.get('flashcards').reverse(),
   }),
   (dispatch) => ({
     loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),

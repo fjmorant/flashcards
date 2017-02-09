@@ -7,10 +7,10 @@ export const SET_FLASHCARD_MEANING = 'SET_FLASHCARD_MEANING';
 export const SET_FLASHCARD_EXAMPLE = 'SET_FLASHCARD_EXAMPLE';
 export const CLEAR_FLASHCARD = 'CLEAR_FLASHCARD';
 
-const setFlashCardName = createAction(SET_FLASHCARD_NAME);
-const setFlashCardMeaning = createAction(SET_FLASHCARD_MEANING);
-const setFlashCardExample = createAction(SET_FLASHCARD_EXAMPLE);
-const clearFlashCard = createAction(CLEAR_FLASHCARD);
+export const setFlashCardName = createAction(SET_FLASHCARD_NAME);
+export const setFlashCardMeaning = createAction(SET_FLASHCARD_MEANING);
+export const setFlashCardExample = createAction(SET_FLASHCARD_EXAMPLE);
+export const clearFlashCard = createAction(CLEAR_FLASHCARD);
 
 export const changeFlashCardName = (name) => {
   return (dispatch) => {
@@ -28,10 +28,10 @@ export const changeFlashCardExample = (example) => {
   };
 };
 
-export const saveFlashCard = () => {
+export const saveFlashCard = (id) => {
   return (dispatch, getState) => {
-    dispatch(addNewFlashCard(getState().addFlashCard));
-    dispatch(clearFlashCard());
+    dispatch(addNewFlashCard(getState().addFlashCard, id))
+    dispatch(clearFlashCard())
   };
 };
 

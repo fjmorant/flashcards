@@ -1728,7 +1728,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.0.3:
+hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -2624,9 +2624,9 @@ react-native-navbar@^1.6.0:
   dependencies:
     react-tween-state "^0.1.5"
 
-react-native-tab-view@^0.0.54:
-  version "0.0.54"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.54.tgz#838e2de5a791488353786e2fe7e8f77a72f03b87"
+react-native-tab-view@^0.0.55:
+  version "0.0.55"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.55.tgz#6e82c50f916b46e0a5af2f9748e6aca36d58f7ad"
 
 react-native-vector-icons@4.0.0:
   version "4.0.0"
@@ -2716,15 +2716,16 @@ react-native@0.40.0:
     xmldoc "^0.4.0"
     yargs "^6.4.0"
 
-"react-navigation@https://github.com/react-community/react-navigation.git#c5720cafb43a2c20cc6c02269860c1aa617d5448":
-  version "1.0.0-beta.1"
-  resolved "https://github.com/react-community/react-navigation.git#c5720cafb43a2c20cc6c02269860c1aa617d5448"
+react-navigation@1.0.0-beta.3:
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.0.0-beta.3.tgz#1458380792f63f895241e435b72f76b2dd60ea4e"
   dependencies:
     clamp "^1.0.1"
     fbjs "^0.8.5"
+    hoist-non-react-statics "^1.2.0"
     path-to-regexp "^1.7.0"
     react-native-drawer-layout "^1.1.0"
-    react-native-tab-view "^0.0.54"
+    react-native-tab-view "^0.0.55"
 
 react-proxy@^1.1.7:
   version "1.1.8"

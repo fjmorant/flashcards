@@ -11,6 +11,7 @@ import {
   changeFlashCardMeaning,
   changeFlashCardExample,
   saveFlashCard,
+  clearFlashCard,
 } from './flashcards/addFlashCardDuck';
 import {connect} from 'react-redux';
 
@@ -25,11 +26,24 @@ const styles = StyleSheet.create({
 });
 
 class AddFlashCardScreen extends Component {
-
   static navigationOptions = {
     title: 'Add Flash Cards',
     header: {
       right: null,
+    }
+  }
+
+  componentDidMount() {
+    const {state:{params}} = this.props.navigation
+
+    if (params && params.id) {
+      const flashcard = this.props.flashcards.find((flashcard) => flashcard.get('id') === params.id)
+
+      this.props.changeFlashCardName(flashcard.get('flashCardName'))
+      this.props.changeFlashCardMeaning(flashcard.get('flashCardMeaning'))
+      this.props.changeFlashCardExample(flashcard.get('flashCardExample'))
+    } else {
+      this.props.clearFlashCard()
     }
   }
 
@@ -62,7 +76,8 @@ class AddFlashCardScreen extends Component {
             disabled={!this.shouldEnableSaveButton()}
             height={40}
             onPress={() => {
-              this.props.saveFlashCard()
+              const {state:{params = {}}} = this.props.navigation
+              this.props.saveFlashCard(params.id)
               this.props.navigation.goBack()
             }}
             title='Save'/>
@@ -83,6 +98,7 @@ AddFlashCardScreen.propTypes = {
 };
 
 export default connect(state => ({
+    flashcards: state.flashcards.get('flashcards'),
     flashCardName: state.addFlashCard.get('flashCardName'),
     flashCardMeaning: state.addFlashCard.get('flashCardMeaning'),
     flashCardExample: state.addFlashCard.get('flashCardExample'),
@@ -91,8 +107,9 @@ export default connect(state => ({
     changeFlashCardName: (text) => dispatch(changeFlashCardName(text)),
     changeFlashCardMeaning: (text) => dispatch(changeFlashCardMeaning(text)),
     changeFlashCardExample: (text) => dispatch(changeFlashCardExample(text)),
-    saveFlashCard: () => {
-      dispatch(saveFlashCard())
+    clearFlashCard: () => dispatch(clearFlashCard()),
+    saveFlashCard: (id) => {
+      dispatch(saveFlashCard(id))
     },
   })
 )(AddFlashCardScreen);
