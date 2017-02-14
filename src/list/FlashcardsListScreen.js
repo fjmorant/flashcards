@@ -6,10 +6,10 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-import List from './common/List';
+import List from '../common/List';
 import {fromJS} from 'immutable';
 import {connect} from 'react-redux';
-import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcards/flashcardsDuck'
+import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcardsDuck'
 import Swipeout from 'react-native-swipeout'
 
 const styles = StyleSheet.create({

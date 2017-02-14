@@ -1,16 +1,16 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk';
-import flashcards from './flashcards/flashcardsDuck';
-import addFlashCard from './flashcards/addFlashCardDuck'
+import flashcards from './list/flashcardsDuck';
+import addFlashCard from './add/addFlashCardDuck'
 import React, {Component} from 'react'
-import MainScreen from './MainScreen'
-import AddFlashCardScreen from './AddFlashCardScreen'
+import FlashcardsListScreen from './list/FlashcardsListScreen'
+import AddFlashCardScreen from './add/AddFlashCardScreen'
 
 import {StackNavigator} from 'react-navigation'
 
 const BasicApp = StackNavigator({
-  Main: {screen: MainScreen},
+  List: {screen: FlashcardsListScreen},
   Add: {screen: AddFlashCardScreen},
 });
 

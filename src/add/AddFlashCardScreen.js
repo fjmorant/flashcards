@@ -3,16 +3,16 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import Input from './common/Input';
-import InputArea from './common/InputArea';
-import Button from './common/Button';
+import Input from '../common/Input';
+import InputArea from '../common/InputArea';
+import Button from '../common/Button';
 import {
   changeFlashCardName,
   changeFlashCardMeaning,
   changeFlashCardExample,
   saveFlashCard,
   clearFlashCard,
-} from './flashcards/addFlashCardDuck';
+} from './addFlashCardDuck';
 import {connect} from 'react-redux';
 
 const styles = StyleSheet.create({

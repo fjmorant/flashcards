@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import {fromJS} from 'immutable';
-import {addNewFlashCard} from './flashcardsDuck';
+import {addNewFlashCard} from '../list/flashcardsDuck';
 
 export const SET_FLASHCARD_NAME = 'SET_FLASHCARD_NAME';
 export const SET_FLASHCARD_MEANING = 'SET_FLASHCARD_MEANING';
