@@ -51,7 +51,18 @@ class FlashCards extends Component {
           onPress={() => navigate('Add')}
         />
       )
-      return {right}
+
+      let left = (
+        <Button
+          title={'Practise'}
+          onPress={() => navigate('View')}
+        />
+      )
+
+      return {
+        right,
+        left,
+      }
     },
   }
 
@@ -92,7 +103,7 @@ class FlashCards extends Component {
             items={this.props.flashcards}
             renderItem={this.renderFlashCard}/>
       </View>
-    );
+    )
   }
 }
 

@@ -6,12 +6,16 @@ import addFlashCard from './add/addFlashCardDuck'
 import React, {Component} from 'react'
 import FlashcardsListScreen from './list/FlashcardsListScreen'
 import AddFlashCardScreen from './add/AddFlashCardScreen'
+import PractiseScreen from './view/PractiseScreen'
 
 import {StackNavigator} from 'react-navigation'
 
 const BasicApp = StackNavigator({
   List: {screen: FlashcardsListScreen},
   Add: {screen: AddFlashCardScreen},
+  View: {screen: PractiseScreen}
+}, {
+  headerMode: 'screen',
 });
 
 
