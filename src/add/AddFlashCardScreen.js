@@ -1,19 +1,21 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react'
 import {
+  Button as ReactNativeButton,
   StyleSheet,
   View,
 } from 'react-native';
-import Input from '../common/Input';
-import InputArea from '../common/InputArea';
-import Button from '../common/Button';
+import Input from '../common/Input'
+import InputArea from '../common/InputArea'
+import Button from '../common/Button'
 import {
   changeFlashCardName,
   changeFlashCardMeaning,
   changeFlashCardExample,
   saveFlashCard,
-  clearFlashCard,
-} from './addFlashCardDuck';
-import {connect} from 'react-redux';
+  onFindButtonPressed,
+} from './eventHandlers'
+import {clearFlashCard} from './actionCreators'
+import {connect} from 'react-redux'
 
 const styles = StyleSheet.create({
   container: {
@@ -22,10 +24,12 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 8,
+    flex: 1,
   },
 });
 
 class AddFlashCardScreen extends Component {
+
   static navigationOptions = {
     title: 'Add Flash Cards',
     header: {
@@ -54,13 +58,20 @@ class AddFlashCardScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Input
-            height={35}
-            onChangeText={this.props.changeFlashCardName}
-            placeholder='Type word you want to remember'
-            returnKeyType='next'
-            style={styles.input}
-            value={this.props.name}/>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Input
+              height={35}
+              onChangeText={this.props.changeFlashCardName}
+              placeholder='Type word you want to remember'
+              returnKeyType='next'
+              style={styles.input}
+              value={this.props.name}/>
+          <ReactNativeButton
+            onPress={this.props.onFindButtonPressed}
+            title={'Find'}
+          />
+        </View>
+
         <InputArea
             onChangeText={this.props.changeFlashCardMeaning}
             placeholder='Explanation of the word'
@@ -111,5 +122,6 @@ export default connect(state => ({
     saveFlashCard: (id) => {
       dispatch(saveFlashCard(id))
     },
+    onFindButtonPressed: () => dispatch(onFindButtonPressed())
   })
 )(AddFlashCardScreen);

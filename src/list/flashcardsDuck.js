@@ -34,8 +34,9 @@ export const addNewFlashCard = (flashcard, id) => {
 
 const handleAddFlashCard = (state, {payload}) => {
   const flashCardId = shortid.generate()
+  const list = state.get('flashcards') || List()
 
-  return state.set('flashcards', state.get('flashcards').push(payload.set('id', flashCardId)))
+  return state.set('flashcards', list.push(payload.set('id', flashCardId)))
 }
 const handleDeleteFlashCard = (state, {payload}) => {
   const newFlashCards = state.get('flashcards').filter((flashcard) => flashcard.get('id') !== payload)

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import List from '../common/List';
-import {fromJS} from 'immutable';
+import immutable from 'immutable';
 import {connect} from 'react-redux';
 import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcardsDuck'
 import Swipeout from 'react-native-swipeout'
@@ -108,7 +108,7 @@ class FlashCards extends Component {
 }
 
 export default connect(state => ({
-    flashcards: state.flashcards.get('flashcards').reverse(),
+    flashcards: state.flashcards.get('flashcards') ? state.flashcards.get('flashcards').reverse() : immutable.List(),
   }),
   (dispatch) => ({
     loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),

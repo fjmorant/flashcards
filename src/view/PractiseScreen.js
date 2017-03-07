@@ -5,9 +5,10 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from 'react-native'
 
-import {connect} from 'react-redux';
+import immutable from 'immutable'
+import {connect} from 'react-redux'
 
 const styles = StyleSheet.create({
   container: {
@@ -32,14 +33,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   flashcardDefinitionContainer: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
   },
   flashcardDefinitionText: {
     fontSize: 25,
   },
   flashcardExampleContainer: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
   },
   flashcardExampleText: {
@@ -102,14 +103,16 @@ class PractiseScreen extends Component {
               })}
               title={'Prev'}
             />
-            <FlashCard
-                name={flashcard.get('name')}
-                example={flashcard.get('example')}
-                meaning={flashcard.get('meaning')}
-            />
+            {
+              flashcard ? <FlashCard
+                            name={flashcard.get('name')}
+                            example={flashcard.get('example')}
+                            meaning={flashcard.get('meaning')}
+                          /> : null
+            }
             <Button
               onPress={() => this.setState({
-                flashcardIndex: this.state.flashcardIndex < numFlashcards - 1 ? this.state.flashcardIndex + 1 : numFlashcards - 1 
+                flashcardIndex: this.state.flashcardIndex < numFlashcards - 1 ? this.state.flashcardIndex + 1 : numFlashcards - 1
               })}
               title={'Next'}
             />
@@ -120,5 +123,5 @@ class PractiseScreen extends Component {
 }
 
 export default connect(state => ({
-    flashcards: state.flashcards.get('flashcards'),
+    flashcards: state.flashcards.get('flashcards') || immutable.List(),
   }), null)(PractiseScreen);

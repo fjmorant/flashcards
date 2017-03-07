@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk';
 import flashcards from './list/flashcardsDuck';
-import addFlashCard from './add/addFlashCardDuck'
+import addFlashCard from './add'
 import React, {Component} from 'react'
 import FlashcardsListScreen from './list/FlashcardsListScreen'
 import AddFlashCardScreen from './add/AddFlashCardScreen'
@@ -16,11 +16,10 @@ const BasicApp = StackNavigator({
   View: {screen: PractiseScreen}
 }, {
   headerMode: 'screen',
-});
-
+})
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-const reducer = combineReducers({flashcards, addFlashCard})
+const reducer = combineReducers({flashcards, addFlashCard: addFlashCard.reducer})
 const store = createStoreWithMiddleware(reducer)
 
 export default class App extends Component {
