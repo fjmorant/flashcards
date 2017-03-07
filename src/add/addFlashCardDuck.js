@@ -36,14 +36,14 @@ export const saveFlashCard = (id) => {
 };
 
 const defaultState = fromJS({
-  flashCardName: '',
-  flashCardMeaning: '',
-  flashCardExample: '',
+  name: '',
+  meaning: '',
+  example: '',
 });
 
 export default handleActions({
-  [SET_FLASHCARD_NAME]: (state, {payload}) => state.set('flashCardName', payload),
-  [SET_FLASHCARD_MEANING]: (state, {payload}) => state.set('flashCardMeaning', payload),
-  [SET_FLASHCARD_EXAMPLE]: (state, {payload}) => state.set('flashCardExample', payload),
+  [SET_FLASHCARD_NAME]: (state, {payload}) => state.set('name', payload),
+  [SET_FLASHCARD_MEANING]: (state, {payload}) => state.set('meaning', payload),
+  [SET_FLASHCARD_EXAMPLE]: (state, {payload}) => state.set('example', payload),
   [CLEAR_FLASHCARD]: () => defaultState,
 }, defaultState);

@@ -39,16 +39,16 @@ class AddFlashCardScreen extends Component {
     if (params && params.id) {
       const flashcard = this.props.flashcards.find((flashcard) => flashcard.get('id') === params.id)
 
-      this.props.changeFlashCardName(flashcard.get('flashCardName'))
-      this.props.changeFlashCardMeaning(flashcard.get('flashCardMeaning'))
-      this.props.changeFlashCardExample(flashcard.get('flashCardExample'))
+      this.props.changeFlashCardName(flashcard.get('name'))
+      this.props.changeFlashCardMeaning(flashcard.get('meaning'))
+      this.props.changeFlashCardExample(flashcard.get('example'))
     } else {
       this.props.clearFlashCard()
     }
   }
 
   shouldEnableSaveButton() {
-    return this.props.flashCardName && this.props.flashCardMeaning && this.props.flashCardExample;
+    return this.props.name && this.props.meaning && this.props.example;
   }
 
   render() {
@@ -60,18 +60,18 @@ class AddFlashCardScreen extends Component {
             placeholder='Type word you want to remember'
             returnKeyType='next'
             style={styles.input}
-            value={this.props.flashCardName}/>
+            value={this.props.name}/>
         <InputArea
             onChangeText={this.props.changeFlashCardMeaning}
             placeholder='Explanation of the word'
             returnKeyType='next'
             style={styles.input}
-            value={this.props.flashCardMeaning}/>
+            value={this.props.meaning}/>
         <InputArea
             onChangeText={this.props.changeFlashCardExample}
             placeholder='Example of your word'
             style={styles.input}
-            value={this.props.flashCardExample}/>
+            value={this.props.example}/>
         <Button
             disabled={!this.shouldEnableSaveButton()}
             height={40}
@@ -90,18 +90,18 @@ AddFlashCardScreen.propTypes = {
   changeFlashCardExample: PropTypes.func,
   changeFlashCardMeaning: PropTypes.func,
   changeFlashCardName: PropTypes.func,
-  flashCardExample: PropTypes.string,
-  flashCardMeaning: PropTypes.string,
-  flashCardName: PropTypes.string,
+  example: PropTypes.string,
+  meaning: PropTypes.string,
+  name: PropTypes.string,
   navigator: PropTypes.object,
   saveFlashCard: PropTypes.func,
 };
 
 export default connect(state => ({
     flashcards: state.flashcards.get('flashcards'),
-    flashCardName: state.addFlashCard.get('flashCardName'),
-    flashCardMeaning: state.addFlashCard.get('flashCardMeaning'),
-    flashCardExample: state.addFlashCard.get('flashCardExample'),
+    name: state.addFlashCard.get('name'),
+    meaning: state.addFlashCard.get('meaning'),
+    example: state.addFlashCard.get('example'),
   }),
   (dispatch) => ({
     changeFlashCardName: (text) => dispatch(changeFlashCardName(text)),

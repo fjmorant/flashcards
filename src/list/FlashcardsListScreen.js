@@ -82,13 +82,13 @@ class FlashCards extends Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('Add', {id: flashcard.get('id')})}>
             <View style={{padding: 8}}>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Name : {flashcard.get('flashCardName')}
+                Name : {flashcard.get('name')}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Meaning : {flashcard.get('flashCardMeaning')}
+                Meaning : {flashcard.get('meaning')}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Example : {flashcard.get('flashCardExample')}
+                Example : {flashcard.get('example')}
               </Text>
             </View>
           </TouchableOpacity>
