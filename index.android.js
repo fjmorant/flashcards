@@ -1,3 +1,6 @@
-import initApp from './src/App';
+import App from './src/App'
+import React from 'react'
+import { AppRegistry } from 'react-native'
 
-initApp();
+
+AppRegistry.registerComponent('FlashCards', () => App)

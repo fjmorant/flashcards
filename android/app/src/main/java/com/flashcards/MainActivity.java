@@ -1,7 +1,6 @@
 package com.flashcards;
 
 import com.facebook.react.ReactActivity;
-import com.reactnativenavigation.RnnPackage;
 
 public class MainActivity extends ReactActivity {
 
