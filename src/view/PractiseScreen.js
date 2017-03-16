@@ -106,6 +106,15 @@ class PractiseScreen extends Component {
     this.switchMode = this.switchMode.bind(this)
   }
 
+  componentWillMount() {
+    if (!this.props.flashcards.size) {
+      const {goBack} = this.props.navigation
+
+      goBack()
+      alert('No flash cards found!')
+    }
+  }
+
   static navigationOptions = {
     header: {
       visible: false,
