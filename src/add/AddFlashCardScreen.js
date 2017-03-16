@@ -22,10 +22,10 @@ import ModalPicker from '../common/ModalPicker'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10
+    padding: 8,
   },
   input: {
-    margin: 8,
+    margin: 4,
     flex: 1,
     fontSize: 19,
   },
