@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
 export default ({
   disabled,
   title,
+  titleSize = 20,
   height,
   onPress,
 }) => (
@@ -26,7 +27,7 @@ export default ({
       onPress={!disabled ? onPress : null}
       activeOpacity={disabled ? 1 : 0}>
     <View style={[styles.container, {height, backgroundColor: !disabled ? theme[PRIMARY_COLOR] : theme[DISABLED_PRIMARY_COLOR]}]}>
-      <Text style={{color: 'white'}}>{title}</Text>
+      <Text style={{color: 'white', fontSize: titleSize}}>{title}</Text>
     </View>
   </TouchableOpacity>
 );
