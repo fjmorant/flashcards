@@ -1,14 +1,14 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 import {
   StyleSheet,
   Text,
   View,
   Button,
   TouchableOpacity,
-} from 'react-native';
-import List from '../common/List';
-import immutable from 'immutable';
-import {connect} from 'react-redux';
+} from 'react-native'
+import List from '../common/List'
+import immutable from 'immutable'
+import {connect} from 'react-redux'
 import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcardsDuck'
 import Swipeout from 'react-native-swipeout'
 
@@ -39,7 +39,7 @@ class FlashCards extends Component {
   }
 
   componentDidMount() {
-    this.props.loadFlashCardsFromPersistance();
+    this.props.loadFlashCardsFromPersistance()
   }
 
   static navigationOptions = {
@@ -90,6 +90,9 @@ class FlashCards extends Component {
               <Text style={{color: 'rgb(0,0,0)'}}>
                 Example : {flashcard.get('example')}
               </Text>
+              <Text style={{color: 'rgb(0,0,0)'}}>
+                Mastered : {flashcard.get('mastered').toString()}
+              </Text>
             </View>
           </TouchableOpacity>
       </Swipeout>
@@ -114,4 +117,4 @@ export default connect(state => ({
     loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),
     deleteFlashCard: (id) => dispatch(deleteFlashCard(id)),
   }),
-)(FlashCards);
+)(FlashCards)

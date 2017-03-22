@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
-import thunk from 'redux-thunk';
-import flashcards from './list/flashcardsDuck';
+import thunk from 'redux-thunk'
+import flashcards from './list/flashcardsDuck'
 import addFlashCard from './add'
 import React, {Component} from 'react'
 import FlashcardsListScreen from './list/FlashcardsListScreen'

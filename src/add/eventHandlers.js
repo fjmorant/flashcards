@@ -1,24 +1,32 @@
-import {addNewFlashCard} from '../list/flashcardsDuck'
+import {
+  addNewFlashCard,
+  masterFlashCard,
+  unmasteredFlashCard,
+} from '../list/flashcardsDuck'
 import request from 'superagent'
 import immutable from 'immutable'
 import {Alert} from 'react-native'
 
 import {
+  setFlashCardMastered,
   setFlashCardName,
   setFlashCardMeaning,
   setFlashCardExample,
+  setFlashCardId,
   clearFlashCard,
   setPickerOptions,
   clearPickerOptions,
 } from './actionCreators'
 
+export const changeFlashCardMastered = (mastered) => (dispatch) => dispatch(setFlashCardMastered(mastered))
+export const changeFlashCardId = (id) => (dispatch) => dispatch(setFlashCardId(id))
 export const changeFlashCardName = (name) => (dispatch) => dispatch(setFlashCardName(name))
 export const changeFlashCardMeaning = (meaning) => (dispatch) => dispatch(setFlashCardMeaning(meaning))
 export const changeFlashCardExample = (example) => (dispatch) => dispatch(setFlashCardExample(example))
 
 export const saveFlashCard = (id) => {
   return (dispatch, getState) => {
-    dispatch(addNewFlashCard(getState().addFlashCard, id))
+    dispatch(addNewFlashCard(getState().addFlashCard))
     dispatch(clearFlashCard())
   }
 }
@@ -33,7 +41,7 @@ export const onSearchEntryTriggered = (onOpenModalPicker) => async(dispatch, get
     .set('Accept', 'application/json')
     .end((error, response) => {
       if (error) {
-        Alert.alert('It was not possible to find this definition.')
+        Alert.alert(error.message)
         return
       }
 
@@ -44,7 +52,7 @@ export const onSearchEntryTriggered = (onOpenModalPicker) => async(dispatch, get
           dispatch(setFlashCardExample(entryDictionary.examples[0]))
         }
       } else {
-        dispatch(setPickerOptions(immutable.fromJS(response.results)))
+        dispatch(setPickerOptions(immutable.fromJS(response.body.results)))
         onOpenModalPicker()
       }
     })

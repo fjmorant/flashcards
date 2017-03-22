@@ -1,5 +1,7 @@
 import {createAction} from 'redux-actions'
 
+export const setFlashCardMastered = createAction('SET_FLASHCARD_MASTERED')
+export const setFlashCardId = createAction('SET_FLASHCARD_ID')
 export const setFlashCardName = createAction('SET_FLASHCARD_NAME')
 export const setFlashCardMeaning = createAction('SET_FLASHCARD_MEANING')
 export const setFlashCardExample = createAction('SET_FLASHCARD_EXAMPLE')

@@ -8,12 +8,16 @@ import Input from '../common/Input'
 import InputArea from '../common/InputArea'
 import Button from '../common/Button'
 import {
+  changeFlashCardMastered,
+  changeFlashCardId,
   changeFlashCardName,
   changeFlashCardMeaning,
   changeFlashCardExample,
   saveFlashCard,
   onSearchEntryTriggered,
   onSelectMeaningOption,
+  onSetFlashCardAsMastered,
+  onSetFlashCardAsUnmastered,
 } from './eventHandlers'
 import {clearFlashCard} from './actionCreators'
 import {connect} from 'react-redux'
@@ -48,6 +52,7 @@ class AddFlashCardScreen extends Component {
     }
 
     this.onOpenModalPicker = this.onOpenModalPicker.bind(this)
+    this.toggleMasterFlashcard = this.toggleMasterFlashcard.bind(this)
   }
 
   componentDidMount() {
@@ -59,6 +64,8 @@ class AddFlashCardScreen extends Component {
       this.props.changeFlashCardName(flashcard.get('name'))
       this.props.changeFlashCardMeaning(flashcard.get('meaning'))
       this.props.changeFlashCardExample(flashcard.get('example'))
+      this.props.changeFlashCardId(flashcard.get('id'))
+      this.props.changeFlashCardMastered(flashcard.get('mastered'))
     } else {
       this.props.clearFlashCard()
     }
@@ -72,7 +79,17 @@ class AddFlashCardScreen extends Component {
     this.setState({modalVisible: true})
   }
 
+  toggleMasterFlashcard() {
+    const {state:{params}} = this.props.navigation
+
+    this.props.changeFlashCardMastered(!this.props.mastered)
+    this.props.saveFlashCard(params.id)
+    this.props.navigation.goBack()
+  }
+
   render() {
+    const {state:{params = {}}} = this.props.navigation
+
     return (
       <View style={styles.container}>
         {
@@ -110,16 +127,27 @@ class AddFlashCardScreen extends Component {
             style={styles.input}
             value={this.props.example}
         />
-        <Button
-            disabled={!this.shouldEnableSaveButton()}
-            height={40}
-            onPress={() => {
-              const {state:{params = {}}} = this.props.navigation
-              this.props.saveFlashCard(params.id)
-              this.props.navigation.goBack()
-            }}
-            title='Save'
-        />
+        <View style={{margin: 5}}>
+          <Button
+              disabled={!this.shouldEnableSaveButton()}
+              height={40}
+              onPress={() => {
+                this.props.saveFlashCard(params.id)
+                this.props.navigation.goBack()
+              }}
+              title='Save'
+          />
+        </View>
+        {
+          params.id ?
+          <View style={{margin: 5}}>
+            <Button
+                height={40}
+                onPress={this.toggleMasterFlashcard}
+                title={this.props.mastered ? 'Mark as Unmastered' : 'Mark as Mastered'}
+            />
+          </View> : null
+        }
       </View>
     );
   }
@@ -141,12 +169,15 @@ export default connect(state => ({
     name: state.addFlashCard.get('name'),
     meaning: state.addFlashCard.get('meaning'),
     example: state.addFlashCard.get('example'),
+    mastered: state.addFlashCard.get('mastered'),
     pickerOptions: state.addFlashCard.get('pickerOptions').map((result, index) => ({
       key: index,
       label: result.get('definition')
     })),
   }),
   (dispatch) => ({
+    changeFlashCardMastered: (mastered) => dispatch(changeFlashCardMastered(mastered)),
+    changeFlashCardId: (id) => dispatch(changeFlashCardId(id)),
     changeFlashCardName: (text) => dispatch(changeFlashCardName(text)),
     changeFlashCardMeaning: (text) => dispatch(changeFlashCardMeaning(text)),
     changeFlashCardExample: (text) => dispatch(changeFlashCardExample(text)),

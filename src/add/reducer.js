@@ -1,6 +1,8 @@
 import immutable from 'immutable'
 import {handleActions} from 'redux-actions'
 import {
+  setFlashCardMastered,
+  setFlashCardId,
   setFlashCardName,
   setFlashCardMeaning,
   setFlashCardExample,
@@ -10,13 +12,17 @@ import {
 } from './actionCreators'
 
 const defaultState = immutable.fromJS({
+  id: null,
   name: '',
   meaning: '',
   example: '',
   pickerOptions: [],
+  mastered: false,
 })
 
 export default handleActions({
+  [setFlashCardMastered]: (state, {payload}) => state.set('mastered', payload),
+  [setFlashCardId]: (state, {payload}) => state.set('id', payload),
   [setFlashCardName]: (state, {payload}) => state.set('name', payload),
   [setFlashCardMeaning]: (state, {payload}) => state.set('meaning', payload),
   [setFlashCardExample]: (state, {payload}) => state.set('example', payload),
