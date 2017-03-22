@@ -3,7 +3,7 @@ import {
   Button as ReactNativeButton,
   StyleSheet,
   View,
-} from 'react-native';
+} from 'react-native'
 import Input from '../common/Input'
 import InputArea from '../common/InputArea'
 import Button from '../common/Button'

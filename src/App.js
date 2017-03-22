@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware, combineReducers} from 'redux'
 import {Provider} from 'react-redux'
 import thunk from 'redux-thunk'
-import flashcards from './list/flashcardsDuck'
+import flashcards from './list'
 import addFlashCard from './add'
 import React, {Component} from 'react'
 import FlashcardsListScreen from './list/FlashcardsListScreen'
@@ -19,7 +19,10 @@ const BasicApp = StackNavigator({
 })
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-const reducer = combineReducers({flashcards, addFlashCard: addFlashCard.reducer})
+const reducer = combineReducers({
+  flashcards: flashcards.reducer,
+  addFlashCard: addFlashCard.reducer,
+})
 const store = createStoreWithMiddleware(reducer)
 
 export default class App extends Component {

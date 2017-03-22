@@ -9,7 +9,7 @@ import {
 import List from '../common/List'
 import immutable from 'immutable'
 import {connect} from 'react-redux'
-import {loadFlashCardsFromPersistance, deleteFlashCard} from './flashcardsDuck'
+import {loadFlashCardsFromPersistance, deleteFlashCard} from './eventHandlers'
 import Swipeout from 'react-native-swipeout'
 
 const styles = StyleSheet.create({

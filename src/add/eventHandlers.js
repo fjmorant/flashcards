@@ -1,8 +1,4 @@
-import {
-  addNewFlashCard,
-  masterFlashCard,
-  unmasteredFlashCard,
-} from '../list/flashcardsDuck'
+import flashcards from '../list'
 import request from 'superagent'
 import immutable from 'immutable'
 import {Alert} from 'react-native'
@@ -17,6 +13,10 @@ import {
   setPickerOptions,
   clearPickerOptions,
 } from './actionCreators'
+
+const {
+  addNewFlashCard,
+} = flashcards.eventHandlers
 
 export const changeFlashCardMastered = (mastered) => (dispatch) => dispatch(setFlashCardMastered(mastered))
 export const changeFlashCardId = (id) => (dispatch) => dispatch(setFlashCardId(id))
