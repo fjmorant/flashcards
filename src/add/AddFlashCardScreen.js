@@ -22,6 +22,8 @@ import {
 import {clearFlashCard} from './actionCreators'
 import {connect} from 'react-redux'
 import ModalPicker from '../common/ModalPicker'
+import immutable from 'immutable'
+import request from 'superagent'
 
 const styles = StyleSheet.create({
   container: {
@@ -44,39 +46,40 @@ class AddFlashCardScreen extends Component {
     }
   }
 
-  constructor() {
+  constructor(props) {
     super()
 
-    this.state = {
-      modalVisible: false
-    }
-
-    this.onOpenModalPicker = this.onOpenModalPicker.bind(this)
     this.toggleMasterFlashcard = this.toggleMasterFlashcard.bind(this)
-  }
+    this.changeName = this.changeName.bind(this)
+    this.changeMeaning = this.changeMeaning.bind(this)
+    this.changeExample = this.changeExample.bind(this)
+    this.onSearchEntryTriggered = this.onSearchEntryTriggered.bind(this)
+    this.onSelectMeaningOption = this.onSelectMeaningOption.bind(this)
 
-  componentDidMount() {
-    const {state:{params}} = this.props.navigation
+    const {state:{params}} = props.navigation
+
+    let flashcard = null
 
     if (params && params.id) {
-      const flashcard = this.props.flashcards.find((flashcard) => flashcard.get('id') === params.id)
-
-      this.props.changeFlashCardName(flashcard.get('name'))
-      this.props.changeFlashCardMeaning(flashcard.get('meaning'))
-      this.props.changeFlashCardExample(flashcard.get('example'))
-      this.props.changeFlashCardId(flashcard.get('id'))
-      this.props.changeFlashCardMastered(flashcard.get('mastered'))
+      flashcard = props.flashcards.find((flashcard) => flashcard.get('id') === params.id)
     } else {
-      this.props.clearFlashCard()
+      flashcard = immutable.fromJS({
+        name: '',
+        meaning: '',
+        example: '',
+        mastered: false,
+      })
+    }
+
+    this.state = {
+      flashcard,
+      modalVisible: false,
+      pickerOptions: immutable.List(),
     }
   }
 
   shouldEnableSaveButton() {
-    return this.props.name && this.props.meaning && this.props.example;
-  }
-
-  onOpenModalPicker() {
-    this.setState({modalVisible: true})
+    return this.state.flashcard.get('name') && this.state.flashcard.get('meaning') && this.state.flashcard.get('example')
   }
 
   toggleMasterFlashcard() {
@@ -87,52 +90,115 @@ class AddFlashCardScreen extends Component {
     this.props.navigation.goBack()
   }
 
+  changeName(name) {
+    this.setState({
+      flashcard: this.state.flashcard.set('name', name)
+    })
+  }
+
+  changeMeaning(meaning) {
+    this.setState({
+      flashcard: this.state.flashcard.set('meaning', meaning)
+    })
+  }
+
+  changeExample(example) {
+    this.setState({
+      flashcard: this.state.flashcard.set('example', example)
+    })
+  }
+
+  onSearchEntryTriggered() {
+    if (this.state.flashcard.get('name')) {
+      const name = this.state.flashcard.get('name').toLowerCase()
+
+      request
+      .get(`https://wordsapiv1.p.mashape.com/words/${name}`)
+      .set('X-Mashape-Key', 'VQa8Eayg2Kmsh0nklI2QUhfltYkvp19WrI8jsnxrvGVatb8Lf8')
+      .set('Accept', 'application/json')
+      .end((error, response) => {
+        if (error) {
+          Alert.alert(error.message)
+          return
+        }
+
+        if (response.body.results.length === 1) {
+          const entryDictionary = response.body.results[0]
+          this.changeMeaning(entryDictionary.definition)
+          if (entryDictionary.examples && entryDictionary.examples[0]) {
+            this.changeExample(entryDictionary.examples[0])
+          }
+        } else {
+          this.setState({
+            pickerOptions: immutable.fromJS(response.body.results),
+            modalVisible: true,
+          })
+        }
+      })
+    }
+  }
+
+  onSelectMeaningOption(entry) {
+    const entryDictionary = this.state.pickerOptions.get(entry.key)
+
+    this.changeMeaning(entryDictionary.get('definition'))
+    if (entryDictionary.has('examples') && entryDictionary.getIn(['examples', 0])) {
+      this.changeExample(entryDictionary.getIn(['examples', 0]))
+    }
+    this.setState({
+      pickerOptions: immutable.List(),
+    })
+  }
+
   render() {
     const {state:{params = {}}} = this.props.navigation
 
     return (
       <View style={styles.container}>
         {
-          this.props.pickerOptions.size > 0 ?
+          this.state.pickerOptions.size > 0 ?
               <ModalPicker
-                data={this.props.pickerOptions.toJS()}
+                data={this.state.pickerOptions.toJS().map((result, index) => ({
+                  key: index,
+                  label: result.definition,
+                }))}
                 initValue="Select part speech"
                 modalVisible = {this.state.modalVisible}
                 onClose = {() => this.setState({modalVisible: false})}
-                onChange={this.props.onSelectMeaningOption} /> : null
+                onChange={this.onSelectMeaningOption} /> : null
         }
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Input
               height={35}
-              onChangeText={this.props.changeFlashCardName}
+              onChangeText={this.changeName}
               placeholder='Type word you want to remember'
               returnKeyType='next'
               style={styles.input}
-              value={this.props.name}/>
+              value={this.state.flashcard.get('name')}/>
           <ReactNativeButton
-            onPress={() => this.props.onSearchEntryTriggered(this.onOpenModalPicker)}
+            onPress={this.onSearchEntryTriggered}
             title={'Find'}
           />
         </View>
         <InputArea
-            onChangeText={this.props.changeFlashCardMeaning}
+            onChangeText={this.changeMeaning}
             placeholder='Explanation of the word'
             returnKeyType='next'
             style={styles.input}
-            value={this.props.meaning}
+            value={this.state.flashcard.get('meaning')}
         />
         <InputArea
-            onChangeText={this.props.changeFlashCardExample}
+            onChangeText={this.changeExample}
             placeholder='Example of your word'
             style={styles.input}
-            value={this.props.example}
+            value={this.state.flashcard.get('example')}
         />
         <View style={{margin: 5}}>
           <Button
               disabled={!this.shouldEnableSaveButton()}
               height={40}
               onPress={() => {
-                this.props.saveFlashCard(params.id)
+                this.props.saveFlashCard(this.state.flashcard)
                 this.props.navigation.goBack()
               }}
               title='Save'
@@ -166,24 +232,11 @@ AddFlashCardScreen.propTypes = {
 
 export default connect(state => ({
     flashcards: state.flashcards.get('flashcards'),
-    name: state.addFlashCard.get('name'),
-    meaning: state.addFlashCard.get('meaning'),
-    example: state.addFlashCard.get('example'),
-    mastered: state.addFlashCard.get('mastered'),
-    pickerOptions: state.addFlashCard.get('pickerOptions').map((result, index) => ({
-      key: index,
-      label: result.get('definition')
-    })),
   }),
   (dispatch) => ({
     changeFlashCardMastered: (mastered) => dispatch(changeFlashCardMastered(mastered)),
     changeFlashCardId: (id) => dispatch(changeFlashCardId(id)),
-    changeFlashCardName: (text) => dispatch(changeFlashCardName(text)),
-    changeFlashCardMeaning: (text) => dispatch(changeFlashCardMeaning(text)),
-    changeFlashCardExample: (text) => dispatch(changeFlashCardExample(text)),
     clearFlashCard: () => dispatch(clearFlashCard()),
     saveFlashCard: (id) => dispatch(saveFlashCard(id)),
-    onSearchEntryTriggered: (onOpenModalPicker) => dispatch(onSearchEntryTriggered(onOpenModalPicker)),
-    onSelectMeaningOption: (entry) => dispatch(onSelectMeaningOption(entry.key)),
   })
 )(AddFlashCardScreen)

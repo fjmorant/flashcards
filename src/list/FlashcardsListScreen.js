@@ -9,7 +9,7 @@ import {
 import List from '../common/List'
 import immutable from 'immutable'
 import {connect} from 'react-redux'
-import {loadFlashCardsFromPersistance, deleteFlashCard} from './eventHandlers'
+import {loadFlashCardsFromPersistance, onDeleteFlashCard} from './eventHandlers'
 import Swipeout from 'react-native-swipeout'
 
 const styles = StyleSheet.create({
@@ -71,7 +71,7 @@ class FlashCards extends Component {
       {
         text: 'Delete',
         backgroundColor: 'red',
-        onPress: () => this.props.deleteFlashCard(flashcard.get('id')),
+        onPress: () => this.props.onDeleteFlashCard(flashcard.get('id')),
       }
     ]
 
@@ -115,6 +115,6 @@ export default connect(state => ({
   }),
   (dispatch) => ({
     loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),
-    deleteFlashCard: (id) => dispatch(deleteFlashCard(id)),
+    onDeleteFlashCard: (id) => dispatch(onDeleteFlashCard(id)),
   }),
 )(FlashCards)

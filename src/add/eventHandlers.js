@@ -14,20 +14,14 @@ import {
   clearPickerOptions,
 } from './actionCreators'
 
-const {
-  addNewFlashCard,
-} = flashcards.eventHandlers
+const {addNewFlashCard} = flashcards.eventHandlers
 
 export const changeFlashCardMastered = (mastered) => (dispatch) => dispatch(setFlashCardMastered(mastered))
 export const changeFlashCardId = (id) => (dispatch) => dispatch(setFlashCardId(id))
-export const changeFlashCardName = (name) => (dispatch) => dispatch(setFlashCardName(name))
-export const changeFlashCardMeaning = (meaning) => (dispatch) => dispatch(setFlashCardMeaning(meaning))
-export const changeFlashCardExample = (example) => (dispatch) => dispatch(setFlashCardExample(example))
 
-export const saveFlashCard = (id) => {
+export const saveFlashCard = (flashcard) => {
   return (dispatch, getState) => {
-    dispatch(addNewFlashCard(getState().addFlashCard))
-    dispatch(clearFlashCard())
+    dispatch(addNewFlashCard(flashcard))
   }
 }
 

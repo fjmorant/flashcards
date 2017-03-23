@@ -5,6 +5,7 @@ import {
   loadFlashCards,
   editFlashCard,
   addFlashCard,
+  deleteFlashCard,
 } from './actionCreators'
 
 const saveFlashCards = (flashcards) => {
@@ -34,3 +35,5 @@ export const addNewFlashCard = (flashcard) => {
     saveFlashCards(getState().flashcards.get('flashcards'))
   }
 }
+
+export const onDeleteFlashCard = (id) => (dispatch) => dispatch(deleteFlashCard(id))
