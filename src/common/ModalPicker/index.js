@@ -167,9 +167,7 @@ export default class ModalPicker extends BaseComponent {
     }
 
     close() {
-      this.setState({
-        modalVisible: false
-      });
+      this.props.onClose()
     }
 
     open() {
