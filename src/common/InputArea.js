@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   TextInput,
   StyleSheet,
-} from 'react-native';
+} from 'react-native'
 
 const styles = StyleSheet.create({
   text: {
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
   }
-});
+})
 
 export default ({
   value,
@@ -23,8 +23,10 @@ export default ({
   <TextInput
     {...props}
     multiline
+    returnKeyType='next'
     style={[styles.text, props.style]}
     onChangeText={onChangeText}
     placeholder={placeholder}
-    value={value}/>
-);
+    value={value}
+  />
+)

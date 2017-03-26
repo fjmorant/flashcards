@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {ListView, View} from 'react-native';
+import React, {Component} from 'react'
+import {ListView, View} from 'react-native'
 
 class List extends Component {
 
@@ -10,7 +10,7 @@ class List extends Component {
 
     this.state = {
       dataSource: dataSource.cloneWithRows(props.items.toArray()),
-    };
+    }
 
     this.renderSeparator = this.renderSeparator.bind(this);
   }
@@ -24,7 +24,7 @@ class List extends Component {
   renderSeparator() {
     return (
       <View style={{height: 1, backgroundColor: 'rgb(128, 128, 128)'}}/>
-    );
+    )
   }
 
   render() {
@@ -38,4 +38,4 @@ class List extends Component {
   }
 }
 
-export default List;
+export default List
