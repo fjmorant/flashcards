@@ -91,7 +91,7 @@ class FlashCards extends Component {
                 Example : {flashcard.get('example')}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Mastered : {flashcard.get('mastered').toString()}
+                Mastered : {(flashcard.get('mastered') || false).toString()}
               </Text>
             </View>
           </TouchableOpacity>
