@@ -55,6 +55,7 @@ class AddFlashCardScreen extends Component {
     this.changeExample = this.changeExample.bind(this)
     this.onSearchEntryTriggered = this.onSearchEntryTriggered.bind(this)
     this.onSelectMeaningOption = this.onSelectMeaningOption.bind(this)
+    this.clearPickerOptions = this.clearPickerOptions.bind(this)
 
     const {state:{params}} = props.navigation
 
@@ -140,13 +141,21 @@ class AddFlashCardScreen extends Component {
 
   onSelectMeaningOption(entry) {
     const entryDictionary = this.state.pickerOptions.get(entry.key)
+    const hasExample = entryDictionary.has('examples') && entryDictionary.getIn(['examples', 0])
 
-    this.changeMeaning(entryDictionary.get('definition'))
-    if (entryDictionary.has('examples') && entryDictionary.getIn(['examples', 0])) {
-      this.changeExample(entryDictionary.getIn(['examples', 0]))
-    }
+    this.setState({
+      flashcard: this.state.flashcard.merge({
+        meaning: entryDictionary.get('definition'),
+        example: hasExample ? entryDictionary.getIn(['examples', 0]) : ''
+      }),
+      pickerOptions: immutable.List(),
+    })
+  }
+
+  clearPickerOptions() {
     this.setState({
       pickerOptions: immutable.List(),
+      modalVisible: false,
     })
   }
 
@@ -164,7 +173,7 @@ class AddFlashCardScreen extends Component {
                 }))}
                 initValue="Select part speech"
                 modalVisible = {this.state.modalVisible}
-                onClose = {() => this.setState({modalVisible: false})}
+                onClose = {this.clearPickerOptions}
                 onChange={this.onSelectMeaningOption} /> : null
         }
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -183,7 +192,6 @@ class AddFlashCardScreen extends Component {
         <InputArea
             onChangeText={this.changeMeaning}
             placeholder='Explanation of the word'
-            returnKeyType='next'
             style={styles.input}
             value={this.state.flashcard.get('meaning')}
         />
