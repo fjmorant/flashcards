@@ -14,9 +14,7 @@ const BasicApp = StackNavigator({
   List: {screen: FlashcardsListScreen},
   Add: {screen: AddFlashCardScreen},
   View: {screen: PractiseScreen}
-}, {
-  headerMode: 'screen',
-})
+}, {})
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 const reducer = combineReducers({

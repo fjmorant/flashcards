@@ -115,9 +115,10 @@ class PractiseScreen extends Component {
     }
   }
 
-  static navigationOptions = {
-    header: {
-      visible: false,
+  
+  static navigationOptions = ({ navigation, screenProps }) => {
+    return {
+      header: null,
     }
   }
 

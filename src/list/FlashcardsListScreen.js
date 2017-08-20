@@ -42,31 +42,25 @@ class FlashCards extends Component {
     this.props.loadFlashCardsFromPersistance()
   }
 
-  static navigationOptions = {
-    title: 'Flash Cards',
-    header: ({navigate, state}) => {
-      let right = (
+  static navigationOptions = ({navigation, screenProps}) => {
+    return {
+      title: 'Flash Cards',
+      headerRight: (
         <Button
           title={'Add'}
-          onPress={() => navigate('Add')}
+          onPress={() => navigation.navigate('Add')}
         />
-      )
-
-      let left = (
+      ),
+      headerLeft: (
         <Button
           title={'Practise'}
-          onPress={() => navigate('View')}
+          onPress={() => navigation.navigate('View')}
         />
       )
-
-      return {
-        right,
-        left,
-      }
-    },
+    }
   }
 
-  renderFlashCard(flashcard) {
+  renderFlashCard = (flashcard) => {
     const swipeoutBtns = [
       {
         text: 'Delete',

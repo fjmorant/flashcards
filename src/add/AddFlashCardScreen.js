@@ -39,12 +39,10 @@ const styles = StyleSheet.create({
 
 class AddFlashCardScreen extends Component {
 
-  static navigationOptions = {
+  static navigationOptions = () => ({
     title: 'Add Flash Cards',
-    header: {
-      right: null,
-    }
-  }
+    headerRight: null,
+  })
 
   constructor(props) {
     super()
