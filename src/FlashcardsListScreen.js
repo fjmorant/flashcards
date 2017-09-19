@@ -6,11 +6,9 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native'
-import List from '../common/List'
-import immutable from 'immutable'
-import {connect} from 'react-redux'
-import {loadFlashCardsFromPersistance, onDeleteFlashCard} from './eventHandlers'
+import List from './common/List'
 import Swipeout from 'react-native-swipeout'
+import {observer} from 'mobx-react'
 
 const styles = StyleSheet.create({
   container: {
@@ -31,16 +29,9 @@ const styles = StyleSheet.create({
   },
 })
 
+@observer(['flashCardList'])
 class FlashCards extends Component {
 
-  constructor(props) {
-    super(props)
-    this.renderFlashCard = this.renderFlashCard.bind(this)
-  }
-
-  componentDidMount() {
-    this.props.loadFlashCardsFromPersistance()
-  }
 
   static navigationOptions = ({navigation, screenProps}) => {
     return {
@@ -61,11 +52,12 @@ class FlashCards extends Component {
   }
 
   renderFlashCard = (flashcard) => {
+    console.log('flashcard: ', flashcard)
     const swipeoutBtns = [
       {
         text: 'Delete',
         backgroundColor: 'red',
-        onPress: () => this.props.onDeleteFlashCard(flashcard.get('id')),
+        onPress: () => this.props.flashCardList.delete(flashcard.id),
       }
     ]
 
@@ -73,19 +65,19 @@ class FlashCards extends Component {
       <Swipeout
           autoClose
           right={swipeoutBtns}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Add', {id: flashcard.get('id')})}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Add', {id: flashcard.id})}>
             <View style={{padding: 8}}>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Name : {flashcard.get('name')}
+                Name : {flashcard.name}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Meaning : {flashcard.get('meaning')}
+                Meaning : {flashcard.meaning}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Example : {flashcard.get('example')}
+                Example : {flashcard.example}
               </Text>
               <Text style={{color: 'rgb(0,0,0)'}}>
-                Mastered : {(flashcard.get('mastered') || false).toString()}
+                Mastered : {(flashcard.mastered || false).toString()}
               </Text>
             </View>
           </TouchableOpacity>
@@ -94,21 +86,15 @@ class FlashCards extends Component {
   }
 
   render() {
+    console.log('List of flashcards ', this.props.flashCardList.list)
     return (
       <View>
           <List
-            items={this.props.flashcards}
+            items={this.props.flashCardList.list}
             renderItem={this.renderFlashCard}/>
       </View>
     )
   }
 }
 
-export default connect(state => ({
-    flashcards: state.flashcards.get('flashcards') ? state.flashcards.get('flashcards').reverse() : immutable.List(),
-  }),
-  (dispatch) => ({
-    loadFlashCardsFromPersistance: () => dispatch(loadFlashCardsFromPersistance()),
-    onDeleteFlashCard: (id) => dispatch(onDeleteFlashCard(id)),
-  }),
-)(FlashCards)
+export default FlashCards

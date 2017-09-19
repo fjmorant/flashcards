@@ -4,12 +4,12 @@ import {ListView, View} from 'react-native'
 class List extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
 
     const dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      dataSource: dataSource.cloneWithRows(props.items.toArray()),
+      dataSource: dataSource.cloneWithRows(props.items),
     }
 
     this.renderSeparator = this.renderSeparator.bind(this);
@@ -17,7 +17,7 @@ class List extends Component {
 
   componentWillReceiveProps(nextProps) {
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(nextProps.items.toArray()),
+            dataSource: this.state.dataSource.cloneWithRows(nextProps.items),
         })
   }
 

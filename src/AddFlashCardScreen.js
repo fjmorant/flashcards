@@ -5,13 +5,13 @@ import {
   StyleSheet,
   View,
 } from 'react-native'
-import Input from '../common/Input'
-import InputArea from '../common/InputArea'
-import Button from '../common/Button'
-import ModalPicker from '../common/ModalPicker'
+import Input from './common/Input'
+import InputArea from './common/InputArea'
+import Button from './common/Button'
+import ModalPicker from './common/ModalPicker'
 import request from 'superagent'
 import {observer} from 'mobx-react'
-import FlashCard from '../flashcards/FlashCard'
+import FlashCard from './FlashCard'
 
 const styles = StyleSheet.create({
   container: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-@observer
+@observer(['flashCardList'])
 class AddFlashCardScreen extends Component {
 
   static navigationOptions = () => ({
@@ -35,22 +35,21 @@ class AddFlashCardScreen extends Component {
 
   flashcard = new FlashCard()
 
+  props: {
+    navigation: any,
+  }
+
   constructor(props) {
     super()
 
-    this.toggleMasterFlashcard = this.toggleMasterFlashcard.bind(this)
-    this.changeName = this.changeName.bind(this)
-    this.changeMeaning = this.changeMeaning.bind(this)
-    this.changeExample = this.changeExample.bind(this)
-    this.onSearchEntryTriggered = this.onSearchEntryTriggered.bind(this)
-    this.onSelectMeaningOption = this.onSelectMeaningOption.bind(this)
-    this.clearPickerOptions = this.clearPickerOptions.bind(this)
-
-    const {state:{params}} = props.navigation
 
     this.state = {
       modalVisible: false,
       pickerOptions: [],
+    }
+
+    if (props.navigation.state.params) {
+      this.flashcard = props.flashCardList.getFlashCard(props.navigation.state.params.id)      
     }
   }
 
@@ -58,26 +57,25 @@ class AddFlashCardScreen extends Component {
     return this.flashcard.name && this.flashcard.meaning && this.flashcard.example
   }
 
-  toggleMasterFlashcard() {
-    const {state:{params}} = this.props.navigation
-
+  toggleMasterFlashcard = () => {
     this.flashcard.toggleMaster()
+    this.props.flashCardList.edit(this.flashcard)
     this.props.navigation.goBack()
   }
 
-  changeName(name) {
+  changeName = (name: string) => {
     this.flashcard.changeName(name)
   }
 
-  changeMeaning(meaning) {
+  changeMeaning = (meaning: string) => {
     this.flashcard.changeMeaning(meaning)    
   }
 
-  changeExample(example) {
+  changeExample = (example) => {
     this.flashcard.changeExample(example)        
   }
 
-  onSearchEntryTriggered() {
+  onSearchEntryTriggered = () => {
     if (this.flashcard.name) {
       const name = this.flashcard.name.toLowerCase()
 
@@ -107,7 +105,7 @@ class AddFlashCardScreen extends Component {
     }
   }
 
-  onSelectMeaningOption(entry) {
+  onSelectMeaningOption = (entry) => {
     const entryDictionary = this.state.pickerOptions[entry.key]
     const hasExample = entryDictionary.examples && entryDictionary.examples[0]
 
@@ -119,7 +117,7 @@ class AddFlashCardScreen extends Component {
     })
   }
 
-  clearPickerOptions() {
+  clearPickerOptions = () => {
     this.setState({
       pickerOptions: [],
       modalVisible: false,
@@ -174,7 +172,7 @@ class AddFlashCardScreen extends Component {
               disabled={!this.shouldEnableSaveButton()}
               height={40}
               onPress={() => {
-                this.props.saveFlashCard(this.flashcard)
+                this.props.flashCardList.add(this.flashcard)
                 this.props.navigation.goBack()
               }}
               title='Save'
@@ -193,17 +191,6 @@ class AddFlashCardScreen extends Component {
       </View>
     );
   }
-}
-
-AddFlashCardScreen.propTypes = {
-  changeFlashCardExample: PropTypes.func,
-  changeFlashCardMeaning: PropTypes.func,
-  changeFlashCardName: PropTypes.func,
-  example: PropTypes.string,
-  meaning: PropTypes.string,
-  name: PropTypes.string,
-  navigator: PropTypes.object,
-  saveFlashCard: PropTypes.func,
 }
 
 export default AddFlashCardScreen

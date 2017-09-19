@@ -1,13 +1,15 @@
 /* @flow */
 
 import FlashCard from './FlashCard'
+import {AsyncStorage} from 'react-native'
 
 interface FlashCardRepository {
-    save(flashCards: Array<FlashCard>): void
-    list(): void
+    save(flashCards: Array<FlashCard>): void,
+    retrieve(): Array<FlashCard>,
+    delete(flashCardId: string): void
 }
 
-class FlashCardRepositoryAsyncStorage implements FlashCardRepository {
+export default class FlashCardRepositoryAsyncStorage implements FlashCardRepository {
     
     async save(flashCards: Array<FlashCard>) {
         try {
@@ -27,8 +29,5 @@ class FlashCardRepositoryAsyncStorage implements FlashCardRepository {
 
             return []
         }
-        
     }
 }
-
-export default FlashCardRepositoryAsyncStorage()
