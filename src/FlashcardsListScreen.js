@@ -52,7 +52,6 @@ class FlashCards extends Component {
   }
 
   renderFlashCard = (flashcard) => {
-    console.log('flashcard: ', flashcard)
     const swipeoutBtns = [
       {
         text: 'Delete',
