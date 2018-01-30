@@ -14,4 +14,9 @@ jobs:
 
       - run: yarn install
 
+  test:
+    override:
+      - "true"
+
+
 
