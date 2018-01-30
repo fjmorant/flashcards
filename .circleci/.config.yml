@@ -13,10 +13,9 @@ jobs:
       - checkout
 
       - run: yarn install
-
-  test:
-    override:
-      - "true"
+test:
+  override:
+    - "true"
 
 
 
