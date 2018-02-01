@@ -8,11 +8,17 @@
 ; Ignore unexpected extra "@providesModule"
 .*/node_modules/.*/node_modules/fbjs/.*
 
+.*/node_modules/*
+
+.*/examples/*
+
 ; Ignore duplicate module providers
 ; For RN Apps installed via npm, "Libraries" folder is inside
 ; "node_modules/react-native" but in the source repo it is in the root
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
+
+<PROJECT_ROOT>/node_modules/[^r].*
 
 [include]
 
@@ -20,8 +26,11 @@
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow
 flow/
+flow-typed/
 
 [options]
+emoji=true
+
 module.system=haste
 
 munge_underscores=true
@@ -37,8 +46,8 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(>=0\\.\\(4[0-9]\\|[1-3][0-9]\\|
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
-unsafe.enable_getters_and_setters=true
-
+esproposal.decorators=ignore
+esproposal.class_static_fields=enable
 esproposal.class_instance_fields=enable
 
 [version]
