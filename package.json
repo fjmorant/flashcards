@@ -40,6 +40,8 @@
     "regenerator-runtime": "^0.11.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
