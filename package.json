@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "lint": "eslint --ext .js ./src/ index.ios.js",
-    "test": "jest",
+    "test": "jest && codecov",
     "flow": "flow"
   },
   "dependencies": {
