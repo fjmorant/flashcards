@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<TextInput
+  allowFontScaling={true}
+  multiline={true}
+  onChangeText={undefined}
+  placeholder={undefined}
+  returnKeyType="next"
+  style={
+    Array [
+      Object {
+        "borderColor": "gray",
+        "borderWidth": 1,
+        "flex": 1,
+        "padding": 5,
+      },
+      undefined,
+    ]
+  }
+  value={undefined}
+/>
+`;
