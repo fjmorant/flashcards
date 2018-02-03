@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<TextInput
+  allowFontScaling={true}
+  onChangeText={undefined}
+  placeholder={undefined}
+  style={
+    Array [
+      Object {
+        "borderColor": "gray",
+        "borderWidth": 1,
+        "height": undefined,
+        "padding": 5,
+      },
+      undefined,
+    ]
+  }
+  value={undefined}
+/>
+`;
