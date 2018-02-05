@@ -1,6 +1,4 @@
-import {connect} from 'react-redux'
-import immutable from 'immutable'
-
+import {observer, inject} from 'mobx-react'
 import React, {Component} from 'react'
 import {
   Button,
@@ -51,49 +49,36 @@ const styles = StyleSheet.create({
   flashcardExampleText: {
     fontSize: 25,
     textAlign: 'justify',
-  }
+  },
 })
 
-const FlashCard = ({
-  name,
-  meaning,
-  mode,
-  example
-}) => (
+const FlashCard = ({name, meaning, mode, example}) => (
   <View style={{flex: 1}}>
     <View style={styles.flashcardHeaderContainer}>
       <Text style={styles.flashcardHeaderText}>{name}</Text>
     </View>
-    {
-      mode === 'DEFINITION' ?
+    {mode === 'DEFINITION' ? (
       <View style={styles.flashcardDefinitionContainer}>
-        <Text style={styles.flashcardDefinitionText}>
-          {meaning}
-        </Text>
-      </View> : null
-    }
-    {
-      mode === 'EXAMPLE' ?
+        <Text style={styles.flashcardDefinitionText}>{meaning}</Text>
+      </View>
+    ) : null}
+    {mode === 'EXAMPLE' ? (
       <View style={styles.flashcardExampleContainer}>
         <Text style={styles.flashcardExampleText}>{example}</Text>
-      </View> : null
-    }
+      </View>
+    ) : null}
   </View>
 )
 
-const Arrow = ({
-  title,
-  onPress,
-}) => (
-  <TouchableOpacity
-      onPress={onPress}
-  >
+const Arrow = ({title, onPress}) => (
+  <TouchableOpacity onPress={onPress}>
     <Text style={{color: 'black', fontSize: 35}}>{title}</Text>
   </TouchableOpacity>
 )
 
+@inject('flashCardList')
+@observer
 class PractiseScreen extends Component {
-
   constructor() {
     super()
 
@@ -107,7 +92,7 @@ class PractiseScreen extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.flashcards.size) {
+    if (!this.props.flashCardList.list.length) {
       const {goBack} = this.props.navigation
 
       goBack()
@@ -115,17 +100,17 @@ class PractiseScreen extends Component {
     }
   }
 
-  
-  static navigationOptions = ({ navigation, screenProps }) => {
+  static navigationOptions = ({navigation, screenProps}) => {
     return {
       header: null,
     }
   }
 
   goNextCard() {
-    const numFlashcards = this.props.flashcards.size
+    const numFlashcards = this.props.flashCardList.list.length
     const oldIndex = this.state.flashcardIndex
-    const flashcardIndex = oldIndex < numFlashcards - 1 ? oldIndex + 1 : numFlashcards - 1
+    const flashcardIndex =
+      oldIndex < numFlashcards - 1 ? oldIndex + 1 : numFlashcards - 1
 
     this.setState({flashcardIndex})
   }
@@ -138,50 +123,41 @@ class PractiseScreen extends Component {
 
   switchMode() {
     this.setState({
-      mode: this.state.mode === 'DEFINITION' ? 'EXAMPLE' : 'DEFINITION'
+      mode: this.state.mode === 'DEFINITION' ? 'EXAMPLE' : 'DEFINITION',
     })
   }
 
   render() {
     const {goBack} = this.props.navigation
-    const flashcard = this.props.flashcards.get(this.state.flashcardIndex)
-    const numFlashcards = this.props.flashcards.size
+    const flashcard = this.props.flashCardList.list[this.state.flashcardIndex]
+    const numFlashcards = this.props.flashCardList.list.length
 
     return (
       <View style={styles.container}>
-          <View style={styles.closeContainer}>
-            <Button
-              onPress={() => goBack()}
-              title={'Close'}
+        <View style={styles.closeContainer}>
+          <Button onPress={() => goBack()} title={'Close'} />
+        </View>
+        <View style={styles.flashCardsContainer}>
+          <Arrow onPress={this.goPrevCard} title={'<'} />
+          {flashcard ? (
+            <FlashCard
+              example={flashcard.example}
+              meaning={flashcard.meaning}
+              mode={this.state.mode}
+              name={flashcard.name}
             />
-          </View>
-          <View style={styles.flashCardsContainer}>
-            <Arrow
-              onPress={this.goPrevCard}
-              title={'<'}
-            />
-            {
-              flashcard ? <FlashCard
-                            example={flashcard.get('example')}
-                            meaning={flashcard.get('meaning')}
-                            mode={this.state.mode}
-                            name={flashcard.get('name')}
-                          /> : null
-            }
-            <Arrow
-              onPress={this.goNextCard}
-              title={'>'}
-            />
-          </View>
-          <Button
-            onPress={this.switchMode}
-            title={this.state.mode === 'DEFINITION' ? 'See Example' : 'See Definition'}
-          />
+          ) : null}
+          <Arrow onPress={this.goNextCard} title={'>'} />
+        </View>
+        <Button
+          onPress={this.switchMode}
+          title={
+            this.state.mode === 'DEFINITION' ? 'See Example' : 'See Definition'
+          }
+        />
       </View>
     )
   }
 }
 
-export default connect(state => ({
-    flashcards: state.flashcards.get('flashcards') || immutable.List(),
-  }), null)(PractiseScreen);
+export default PractiseScreen
