@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
-import {observer, inject} from 'mobx-react'
+import {observer, inject} from 'mobx-react/native'
 
 const styles = StyleSheet.create({
   container: {
