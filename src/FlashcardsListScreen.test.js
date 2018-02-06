@@ -4,7 +4,9 @@ import FlashcardsListScreen from './FlashcardsListScreen'
 
 import renderer from 'react-test-renderer'
 
-const flashCardList = {}
+const flashCardList = {
+  list: [],
+}
 
 describe('FlashcardsListScreen', () => {
   test('renders correctly', () => {
