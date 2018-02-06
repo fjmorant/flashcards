@@ -1,4 +1,4 @@
-import {observer, inject} from 'mobx-react'
+import {observer, inject} from 'mobx-react/native'
 import React, {Component} from 'react'
 import {
   Button,
