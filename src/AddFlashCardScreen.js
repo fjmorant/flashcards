@@ -10,7 +10,7 @@ import InputArea from './common/InputArea'
 import Button from './common/Button'
 import ModalPicker from './common/ModalPicker'
 import request from 'superagent'
-import {observer} from 'mobx-react'
+import {observer} from 'mobx-react/native'
 import FlashCard from './FlashCard'
 
 const styles = StyleSheet.create({
@@ -23,11 +23,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 19,
   },
-});
+})
 
 @observer(['flashCardList'])
 class AddFlashCardScreen extends Component {
-
   static navigationOptions = () => ({
     title: 'Add Flash Cards',
     headerRight: null,
@@ -42,19 +41,22 @@ class AddFlashCardScreen extends Component {
   constructor(props) {
     super()
 
-
     this.state = {
       modalVisible: false,
       pickerOptions: [],
     }
 
     if (props.navigation.state.params) {
-      this.flashcard = props.flashCardList.getFlashCard(props.navigation.state.params.id)      
+      this.flashcard = props.flashCardList.getFlashCard(
+        props.navigation.state.params.id
+      )
     }
   }
 
   shouldEnableSaveButton() {
-    return this.flashcard.name && this.flashcard.meaning && this.flashcard.example
+    return (
+      this.flashcard.name && this.flashcard.meaning && this.flashcard.example
+    )
   }
 
   toggleMasterFlashcard = () => {
@@ -68,11 +70,11 @@ class AddFlashCardScreen extends Component {
   }
 
   changeMeaning = (meaning: string) => {
-    this.flashcard.changeMeaning(meaning)    
+    this.flashcard.changeMeaning(meaning)
   }
 
-  changeExample = (example) => {
-    this.flashcard.changeExample(example)        
+  changeExample = example => {
+    this.flashcard.changeExample(example)
   }
 
   onSearchEntryTriggered = () => {
@@ -80,38 +82,41 @@ class AddFlashCardScreen extends Component {
       const name = this.flashcard.name.toLowerCase()
 
       request
-      .get(`https://wordsapiv1.p.mashape.com/words/${name}`)
-      .set('X-Mashape-Key', 'VQa8Eayg2Kmsh0nklI2QUhfltYkvp19WrI8jsnxrvGVatb8Lf8')
-      .set('Accept', 'application/json')
-      .end((error, response) => {
-        if (error) {
-          Alert.alert(error.message)
-          return
-        }
-
-        if (response.body.results.length === 1) {
-          const entryDictionary = response.body.results[0]
-          this.changeMeaning(entryDictionary.definition)
-          if (entryDictionary.examples && entryDictionary.examples[0]) {
-            this.changeExample(entryDictionary.examples[0])
+        .get(`https://wordsapiv1.p.mashape.com/words/${name}`)
+        .set(
+          'X-Mashape-Key',
+          'VQa8Eayg2Kmsh0nklI2QUhfltYkvp19WrI8jsnxrvGVatb8Lf8'
+        )
+        .set('Accept', 'application/json')
+        .end((error, response) => {
+          if (error) {
+            Alert.alert(error.message)
+            return
           }
-        } else {
-          this.setState({
-            pickerOptions: response.body.results,
-            modalVisible: true,
-          })
-        }
-      })
+
+          if (response.body.results.length === 1) {
+            const entryDictionary = response.body.results[0]
+            this.changeMeaning(entryDictionary.definition)
+            if (entryDictionary.examples && entryDictionary.examples[0]) {
+              this.changeExample(entryDictionary.examples[0])
+            }
+          } else {
+            this.setState({
+              pickerOptions: response.body.results,
+              modalVisible: true,
+            })
+          }
+        })
     }
   }
 
-  onSelectMeaningOption = (entry) => {
+  onSelectMeaningOption = entry => {
     const entryDictionary = this.state.pickerOptions[entry.key]
     const hasExample = entryDictionary.examples && entryDictionary.examples[0]
 
     this.flashcard.changeMeaning(entryDictionary.definition)
     this.flashcard.changeExample(hasExample ? entryDictionary.examples[0] : '')
-    
+
     this.setState({
       pickerOptions: [],
     })
@@ -125,71 +130,72 @@ class AddFlashCardScreen extends Component {
   }
 
   render() {
-    const {state:{params = {}}} = this.props.navigation
+    const {state: {params = {}}} = this.props.navigation
 
     return (
       <View style={styles.container}>
-        {
-          this.state.pickerOptions.size > 0 ?
-              <ModalPicker
-                  data={this.state.pickerOptions.map((result, index) => ({
-                  key: index,
-                  label: result.definition,
-                }))}
-                  initValue="Select part speech"
-                  modalVisible = {this.state.modalVisible}
-                  onChange={this.onSelectMeaningOption}
-                  onClose = {this.clearPickerOptions}
-                   /> : null
-        }
+        {this.state.pickerOptions.size > 0 ? (
+          <ModalPicker
+            data={this.state.pickerOptions.map((result, index) => ({
+              key: index,
+              label: result.definition,
+            }))}
+            initValue="Select part speech"
+            modalVisible={this.state.modalVisible}
+            onChange={this.onSelectMeaningOption}
+            onClose={this.clearPickerOptions}
+          />
+        ) : null}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Input
-              height={35}
-              onChangeText={this.changeName}
-              placeholder='Type word you want to remember'
-              returnKeyType='next'
-              style={styles.input}
-              value={this.flashcard.name}/>
+            height={35}
+            onChangeText={this.changeName}
+            placeholder="Type word you want to remember"
+            returnKeyType="next"
+            style={styles.input}
+            value={this.flashcard.name}
+          />
           <ReactNativeButton
-              onPress={this.onSearchEntryTriggered}
-              title={'Find'}
+            onPress={this.onSearchEntryTriggered}
+            title={'Find'}
           />
         </View>
         <InputArea
-            onChangeText={this.changeMeaning}
-            placeholder='Explanation of the word'
-            style={styles.input}
-            value={this.flashcard.meaning}
+          onChangeText={this.changeMeaning}
+          placeholder="Explanation of the word"
+          style={styles.input}
+          value={this.flashcard.meaning}
         />
         <InputArea
-            onChangeText={this.changeExample}
-            placeholder='Example of your word'
-            style={styles.input}
-            value={this.flashcard.example}
+          onChangeText={this.changeExample}
+          placeholder="Example of your word"
+          style={styles.input}
+          value={this.flashcard.example}
         />
         <View style={{margin: 5}}>
           <Button
-              disabled={!this.shouldEnableSaveButton()}
-              height={40}
-              onPress={() => {
-                this.props.flashCardList.add(this.flashcard)
-                this.props.navigation.goBack()
-              }}
-              title='Save'
+            disabled={!this.shouldEnableSaveButton()}
+            height={40}
+            onPress={() => {
+              this.props.flashCardList.add(this.flashcard)
+              this.props.navigation.goBack()
+            }}
+            title="Save"
           />
         </View>
-        {
-          params.id ?
+        {params.id ? (
           <View style={{margin: 5}}>
             <Button
-                height={40}
-                onPress={this.toggleMasterFlashcard}
-                title={this.props.mastered ? 'Mark as Unmastered' : 'Mark as Mastered'}
+              height={40}
+              onPress={this.toggleMasterFlashcard}
+              title={
+                this.props.mastered ? 'Mark as Unmastered' : 'Mark as Mastered'
+              }
             />
-          </View> : null
-        }
+          </View>
+        ) : null}
       </View>
-    );
+    )
   }
 }
 
