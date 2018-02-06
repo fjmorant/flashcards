@@ -5,7 +5,7 @@ exports[`FlashcardsListScreen renders correctly 1`] = `
   <RCTScrollView
     dataSource={
       ListViewDataSource {
-        "items": 0,
+        "items": 1,
       }
     }
     enableEmptySections={true}
@@ -13,7 +13,132 @@ exports[`FlashcardsListScreen renders correctly 1`] = `
     renderScrollComponent={[Function]}
     renderSeparator={[Function]}
   >
-    <View />
+    <View>
+      <View
+        style={
+          Array [
+            Object {
+              "backgroundColor": "#dbddde",
+              "overflow": "hidden",
+            },
+            undefined,
+          ]
+        }
+      >
+        <View
+          onLayout={[Function]}
+          onMoveShouldSetResponder={[Function]}
+          onMoveShouldSetResponderCapture={[Function]}
+          onResponderEnd={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderReject={[Function]}
+          onResponderRelease={[Function]}
+          onResponderStart={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          onStartShouldSetResponderCapture={[Function]}
+          style={
+            Array [
+              Object {},
+              Object {
+                "left": 0,
+              },
+            ]
+          }
+        >
+          <View
+            accessibilityComponentType={undefined}
+            accessibilityLabel={undefined}
+            accessibilityTraits={undefined}
+            accessible={true}
+            collapsable={undefined}
+            hasTVPreferredFocus={undefined}
+            hitSlop={undefined}
+            isTVSelectable={true}
+            nativeID={undefined}
+            onLayout={undefined}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+            testID={undefined}
+            tvParallaxProperties={undefined}
+          >
+            <View
+              style={
+                Object {
+                  "padding": 8,
+                }
+              }
+            >
+              <Text
+                accessible={true}
+                allowFontScaling={true}
+                ellipsizeMode="tail"
+                style={
+                  Object {
+                    "color": "rgb(0,0,0)",
+                  }
+                }
+              >
+                Name : 
+                
+              </Text>
+              <Text
+                accessible={true}
+                allowFontScaling={true}
+                ellipsizeMode="tail"
+                style={
+                  Object {
+                    "color": "rgb(0,0,0)",
+                  }
+                }
+              >
+                Meaning : 
+                
+              </Text>
+              <Text
+                accessible={true}
+                allowFontScaling={true}
+                ellipsizeMode="tail"
+                style={
+                  Object {
+                    "color": "rgb(0,0,0)",
+                  }
+                }
+              >
+                Example : 
+                
+              </Text>
+              <Text
+                accessible={true}
+                allowFontScaling={true}
+                ellipsizeMode="tail"
+                style={
+                  Object {
+                    "color": "rgb(0,0,0)",
+                  }
+                }
+              >
+                Mastered : 
+                false
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View />
+        <View />
+      </View>
+    </View>
   </RCTScrollView>
 </View>
 `;
