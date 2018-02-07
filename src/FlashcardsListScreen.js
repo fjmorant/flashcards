@@ -1,14 +1,8 @@
 import React, {Component} from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableOpacity,
-} from 'react-native'
+import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
-import {observer} from 'mobx-react'
+import {observer, inject} from 'mobx-react/native'
 
 const styles = StyleSheet.create({
   container: {
@@ -29,71 +23,66 @@ const styles = StyleSheet.create({
   },
 })
 
-@observer(['flashCardList'])
-class FlashCards extends Component {
-
-
+@inject('flashCardList')
+@observer
+class FlashcardsListScreen extends Component {
   static navigationOptions = ({navigation, screenProps}) => {
     return {
       title: 'Flash Cards',
       headerRight: (
-        <Button
-          title={'Add'}
-          onPress={() => navigation.navigate('Add')}
-        />
+        <Button title={'Add'} onPress={() => navigation.navigate('Add')} />
       ),
       headerLeft: (
         <Button
           title={'Practise'}
           onPress={() => navigation.navigate('View')}
         />
-      )
+      ),
     }
   }
 
-  renderFlashCard = (flashcard) => {
+  renderFlashCard = flashcard => {
     const swipeoutBtns = [
       {
         text: 'Delete',
         backgroundColor: 'red',
         onPress: () => this.props.flashCardList.delete(flashcard.id),
-      }
+      },
     ]
 
     return (
-      <Swipeout
-          autoClose
-          right={swipeoutBtns}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Add', {id: flashcard.id})}>
-            <View style={{padding: 8}}>
-              <Text style={{color: 'rgb(0,0,0)'}}>
-                Name : {flashcard.name}
-              </Text>
-              <Text style={{color: 'rgb(0,0,0)'}}>
-                Meaning : {flashcard.meaning}
-              </Text>
-              <Text style={{color: 'rgb(0,0,0)'}}>
-                Example : {flashcard.example}
-              </Text>
-              <Text style={{color: 'rgb(0,0,0)'}}>
-                Mastered : {(flashcard.mastered || false).toString()}
-              </Text>
-            </View>
-          </TouchableOpacity>
+      <Swipeout autoClose right={swipeoutBtns}>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('Add', {id: flashcard.id})
+          }>
+          <View style={{padding: 8}}>
+            <Text style={{color: 'rgb(0,0,0)'}}>Name : {flashcard.name}</Text>
+            <Text style={{color: 'rgb(0,0,0)'}}>
+              Meaning : {flashcard.meaning}
+            </Text>
+            <Text style={{color: 'rgb(0,0,0)'}}>
+              Example : {flashcard.example}
+            </Text>
+            <Text style={{color: 'rgb(0,0,0)'}}>
+              Mastered : {(flashcard.mastered || false).toString()}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </Swipeout>
-    );
+    )
   }
 
   render() {
-    console.log('List of flashcards ', this.props.flashCardList.list)
     return (
       <View>
-          <List
-            items={this.props.flashCardList.list}
-            renderItem={this.renderFlashCard}/>
+        <List
+          items={this.props.flashCardList.list}
+          renderItem={this.renderFlashCard}
+        />
       </View>
     )
   }
 }
 
-export default FlashCards
+export default FlashcardsListScreen

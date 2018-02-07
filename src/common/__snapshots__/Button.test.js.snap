@@ -1,6 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`Button disabled 1`] = `
+<View
+  accessibilityComponentType={undefined}
+  accessibilityLabel={undefined}
+  accessibilityTraits={undefined}
+  accessible={true}
+  collapsable={undefined}
+  hasTVPreferredFocus={undefined}
+  hitSlop={undefined}
+  isTVSelectable={true}
+  nativeID={undefined}
+  onLayout={undefined}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+  testID={undefined}
+  tvParallaxProperties={undefined}
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 5,
+          "justifyContent": "center",
+        },
+        Object {
+          "backgroundColor": "rgba(0, 64, 128, 0.5)",
+          "height": undefined,
+        },
+      ]
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`Button renders correctly 1`] = `
 <View
   accessibilityComponentType={undefined}
   accessibilityLabel={undefined}
@@ -47,7 +103,63 @@ exports[`renders correctly 1`] = `
       ellipsizeMode="tail"
       style={
         Object {
-          "color": "white",
+          "color": "rgb(255, 255, 255)",
+          "fontSize": 20,
+        }
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`Button renders without onPress 1`] = `
+<View
+  accessibilityComponentType={undefined}
+  accessibilityLabel={undefined}
+  accessibilityTraits={undefined}
+  accessible={true}
+  collapsable={undefined}
+  hasTVPreferredFocus={undefined}
+  hitSlop={undefined}
+  isTVSelectable={true}
+  nativeID={undefined}
+  onLayout={undefined}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+  testID={undefined}
+  tvParallaxProperties={undefined}
+>
+  <View
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "borderRadius": 5,
+          "justifyContent": "center",
+        },
+        Object {
+          "backgroundColor": "rgb(0, 64, 128)",
+          "height": undefined,
+        },
+      ]
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "color": "rgb(255, 255, 255)",
           "fontSize": 20,
         }
       }

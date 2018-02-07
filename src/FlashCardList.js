@@ -7,7 +7,7 @@ export default class FlashCardList {
   flashCards: {[string]: FlashCard}
   flashCardRepository: any
 
-  @observable flashCards = {}
+  @observable flashCards = observable.map()
 
   constructor(flashCardRepository: any) {
     this.flashCardRepository = flashCardRepository
