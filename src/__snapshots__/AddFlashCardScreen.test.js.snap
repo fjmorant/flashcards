@@ -1,0 +1,209 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddFlashCardScreen renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+      "padding": 8,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      onChangeText={[Function]}
+      placeholder="Type word you want to remember"
+      returnKeyType="next"
+      style={
+        Array [
+          Object {
+            "borderColor": "gray",
+            "borderWidth": 1,
+            "height": 35,
+            "padding": 5,
+          },
+          Object {
+            "flex": 1,
+            "fontSize": 19,
+            "margin": 4,
+          },
+        ]
+      }
+      value=""
+    />
+    <View
+      accessibilityComponentType="button"
+      accessibilityLabel={undefined}
+      accessibilityTraits={
+        Array [
+          "button",
+        ]
+      }
+      accessible={true}
+      collapsable={undefined}
+      hasTVPreferredFocus={undefined}
+      hitSlop={undefined}
+      isTVSelectable={true}
+      nativeID={undefined}
+      onLayout={undefined}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+      testID={undefined}
+      tvParallaxProperties={undefined}
+    >
+      <View
+        style={
+          Array [
+            Object {},
+          ]
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          disabled={undefined}
+          ellipsizeMode="tail"
+          style={
+            Array [
+              Object {
+                "color": "#007AFF",
+                "fontSize": 18,
+                "padding": 8,
+                "textAlign": "center",
+              },
+            ]
+          }
+        >
+          Find
+        </Text>
+      </View>
+    </View>
+  </View>
+  <TextInput
+    allowFontScaling={true}
+    multiline={true}
+    onChangeText={[Function]}
+    placeholder="Explanation of the word"
+    returnKeyType="next"
+    style={
+      Array [
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "flex": 1,
+          "padding": 5,
+        },
+        Object {
+          "flex": 1,
+          "fontSize": 19,
+          "margin": 4,
+        },
+      ]
+    }
+    value=""
+  />
+  <TextInput
+    allowFontScaling={true}
+    multiline={true}
+    onChangeText={[Function]}
+    placeholder="Example of your word"
+    returnKeyType="next"
+    style={
+      Array [
+        Object {
+          "borderColor": "gray",
+          "borderWidth": 1,
+          "flex": 1,
+          "padding": 5,
+        },
+        Object {
+          "flex": 1,
+          "fontSize": 19,
+          "margin": 4,
+        },
+      ]
+    }
+    value=""
+  />
+  <View
+    style={
+      Object {
+        "margin": 5,
+      }
+    }
+  >
+    <View
+      accessibilityComponentType={undefined}
+      accessibilityLabel={undefined}
+      accessibilityTraits={undefined}
+      accessible={true}
+      collapsable={undefined}
+      hasTVPreferredFocus={undefined}
+      hitSlop={undefined}
+      isTVSelectable={true}
+      nativeID={undefined}
+      onLayout={undefined}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "opacity": 1,
+        }
+      }
+      testID={undefined}
+      tvParallaxProperties={undefined}
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "borderRadius": 5,
+              "justifyContent": "center",
+            },
+            Object {
+              "backgroundColor": "rgba(0, 64, 128, 0.5)",
+              "height": 40,
+            },
+          ]
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "rgb(255, 255, 255)",
+              "fontSize": 20,
+            }
+          }
+        >
+          Save
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;
