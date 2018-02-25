@@ -1,13 +1,6 @@
 import {observer, inject} from 'mobx-react/native'
 import React, {Component} from 'react'
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
 const styles = StyleSheet.create({
   container: {
@@ -141,17 +134,17 @@ class PractiseScreen extends Component {
           <Arrow onPress={this.goPrevCard} title={'<'} />
           {flashcard ? (
             <FlashCard
-              example={flashcard.example}
-              meaning={flashcard.meaning}
-              mode={this.state.mode}
-              name={flashcard.name}
+                example={flashcard.example}
+                meaning={flashcard.meaning}
+                mode={this.state.mode}
+                name={flashcard.name}
             />
           ) : null}
           <Arrow onPress={this.goNextCard} title={'>'} />
         </View>
         <Button
-          onPress={this.switchMode}
-          title={
+            onPress={this.switchMode}
+            title={
             this.state.mode === 'DEFINITION' ? 'See Example' : 'See Definition'
           }
         />

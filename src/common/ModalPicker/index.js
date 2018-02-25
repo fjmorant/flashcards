@@ -169,8 +169,8 @@ export default class ModalPicker extends BaseComponent {
   renderSection(section) {
     return (
       <View
-        key={section.key}
-        style={[styles.sectionStyle, this.props.sectionStyle]}>
+          key={section.key}
+          style={[styles.sectionStyle, this.props.sectionStyle]}>
         <Text style={[styles.sectionTextStyle, this.props.sectionTextStyle]}>
           {section.label}
         </Text>
@@ -201,8 +201,8 @@ export default class ModalPicker extends BaseComponent {
 
     return (
       <View
-        key={'modalPicker' + componentIndex++}
-        style={[styles.overlayStyle, this.props.overlayStyle]}>
+          key={'modalPicker' + componentIndex++}
+          style={[styles.overlayStyle, this.props.overlayStyle]}>
         <View style={styles.optionContainer}>
           <ScrollView keyboardShouldPersistTaps>
             <View style={{paddingHorizontal: 10}}>{options}</View>
@@ -212,7 +212,7 @@ export default class ModalPicker extends BaseComponent {
           <TouchableOpacity onPress={this.close}>
             <View style={[styles.cancelStyle, this.props.cancelStyle]}>
               <Text
-                style={[styles.cancelTextStyle, this.props.cancelTextStyle]}>
+                  style={[styles.cancelTextStyle, this.props.cancelTextStyle]}>
                 {this.props.cancelText}
               </Text>
             </View>
@@ -239,11 +239,11 @@ export default class ModalPicker extends BaseComponent {
     return (
       <View style={this.props.style}>
         <Modal
-          animationType={this.state.animationType}
-          onRequestClose={this.close}
-          ref="modal"
-          transparent
-          visible={this.props.modalVisible}>
+            animationType={this.state.animationType}
+            onRequestClose={this.close}
+            ref="modal"
+            transparent
+            visible={this.props.modalVisible}>
           {this.renderOptionList()}
         </Modal>
       </View>

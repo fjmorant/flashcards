@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 import {
   Alert,
   Button as ReactNativeButton,
@@ -26,17 +26,21 @@ const styles = StyleSheet.create({
 })
 
 @observer(['flashCardList'])
-class AddFlashCardScreen extends Component {
+class AddFlashCardScreen extends Component<
+  void,
+  {
+    navigation: any,
+    flashCardList: any,
+    mastered: boolean,
+  },
+  void
+> {
   static navigationOptions = () => ({
     title: 'Add Flash Cards',
     headerRight: null,
   })
 
   flashcard = new FlashCard()
-
-  props: {
-    navigation: any,
-  }
 
   constructor(props) {
     super()
@@ -136,59 +140,59 @@ class AddFlashCardScreen extends Component {
       <View style={styles.container}>
         {this.state.pickerOptions.size > 0 ? (
           <ModalPicker
-            data={this.state.pickerOptions.map((result, index) => ({
+              data={this.state.pickerOptions.map((result, index) => ({
               key: index,
               label: result.definition,
             }))}
-            initValue="Select part speech"
-            modalVisible={this.state.modalVisible}
-            onChange={this.onSelectMeaningOption}
-            onClose={this.clearPickerOptions}
+              initValue="Select part speech"
+              modalVisible={this.state.modalVisible}
+              onChange={this.onSelectMeaningOption}
+              onClose={this.clearPickerOptions}
           />
         ) : null}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Input
-            height={35}
-            onChangeText={this.changeName}
-            placeholder="Type word you want to remember"
-            returnKeyType="next"
-            style={styles.input}
-            value={this.flashcard.name}
+              height={35}
+              onChangeText={this.changeName}
+              placeholder="Type word you want to remember"
+              returnKeyType="next"
+              style={styles.input}
+              value={this.flashcard.name}
           />
           <ReactNativeButton
-            onPress={this.onSearchEntryTriggered}
-            title={'Find'}
+              onPress={this.onSearchEntryTriggered}
+              title={'Find'}
           />
         </View>
         <InputArea
-          onChangeText={this.changeMeaning}
-          placeholder="Explanation of the word"
-          style={styles.input}
-          value={this.flashcard.meaning}
+            onChangeText={this.changeMeaning}
+            placeholder="Explanation of the word"
+            style={styles.input}
+            value={this.flashcard.meaning}
         />
         <InputArea
-          onChangeText={this.changeExample}
-          placeholder="Example of your word"
-          style={styles.input}
-          value={this.flashcard.example}
+            onChangeText={this.changeExample}
+            placeholder="Example of your word"
+            style={styles.input}
+            value={this.flashcard.example}
         />
         <View style={{margin: 5}}>
           <Button
-            disabled={!this.shouldEnableSaveButton()}
-            height={40}
-            onPress={() => {
+              disabled={!this.shouldEnableSaveButton()}
+              height={40}
+              onPress={() => {
               this.props.flashCardList.add(this.flashcard)
               this.props.navigation.goBack()
             }}
-            title="Save"
+              title="Save"
           />
         </View>
         {params.id ? (
           <View style={{margin: 5}}>
             <Button
-              height={40}
-              onPress={this.toggleMasterFlashcard}
-              title={
+                height={40}
+                onPress={this.toggleMasterFlashcard}
+                title={
                 this.props.mastered ? 'Mark as Unmastered' : 'Mark as Mastered'
               }
             />
