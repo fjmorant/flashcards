@@ -1,4 +1,3 @@
-/* @flow */
 
 import {observable, action, computed} from 'mobx'
 import FlashCard from './FlashCard'

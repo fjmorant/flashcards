@@ -1,5 +1,3 @@
-/* @flow */
-
 import FlashCard from './FlashCard'
 import {AsyncStorage} from 'react-native'
 
