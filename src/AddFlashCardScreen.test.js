@@ -15,8 +15,8 @@ describe('AddFlashCardScreen', () => {
     const tree = renderer
       .create(
         <AddFlashCardScreen
-          flashCardList={flashCardList}
-          navigation={{state: {params: {}}}}
+            flashCardList={flashCardList}
+            navigation={{state: {params: {}}}}
         />
       )
       .toJSON()

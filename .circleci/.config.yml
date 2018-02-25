@@ -14,6 +14,7 @@ jobs:
 
       - run: yarn install
       - run: yarn test
+      - run: yarn type-check
 test:
   override:
     - echo "done"

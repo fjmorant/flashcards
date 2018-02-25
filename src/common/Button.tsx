@@ -1,7 +1,7 @@
-import React from 'react'
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native'
+import * as React from 'react'
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 import theme from './defaultTheme'
-import {PRIMARY_COLOR, DISABLED_PRIMARY_COLOR} from './ThemeConstants'
+import {DISABLED_PRIMARY_COLOR, PRIMARY_COLOR} from './ThemeConstants'
 
 const styles = StyleSheet.create({
   container: {
@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
 
 export default ({disabled, title, titleSize = 20, height, onPress}) => (
   <TouchableOpacity
-    onPress={!disabled ? onPress : null}
-    activeOpacity={disabled ? 1 : 0}>
+    activeOpacity={disabled ? 1 : 0}
+    onPress={!disabled ? onPress : null}>
     <View
       style={[
         styles.container,
