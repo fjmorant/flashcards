@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: FONT_SIZE,
   },
+  optionsContainer: {paddingHorizontal: 10},
 })
 
 let componentIndex = 0
@@ -205,7 +206,7 @@ export default class ModalPicker extends BaseComponent {
           style={[styles.overlayStyle, this.props.overlayStyle]}>
         <View style={styles.optionContainer}>
           <ScrollView keyboardShouldPersistTaps>
-            <View style={{paddingHorizontal: 10}}>{options}</View>
+            <View style={styles.optionsContainer}>{options}</View>
           </ScrollView>
         </View>
         <View style={styles.cancelContainer}>
@@ -241,7 +242,6 @@ export default class ModalPicker extends BaseComponent {
         <Modal
             animationType={this.state.animationType}
             onRequestClose={this.close}
-            ref="modal"
             transparent
             visible={this.props.modalVisible}>
           {this.renderOptionList()}
