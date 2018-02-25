@@ -1,15 +1,12 @@
 {
-  "plugins": [
-    "react",
-    "react-native"
-  ],
-  "parser": "babel-eslint",    
+  "plugins": ["react", "react-native"],
+  "parser": "babel-eslint",
   "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true
-        },
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "quotes": [2, "single", "avoid-escape"],
@@ -20,7 +17,7 @@
     "react/jsx-sort-props": 2,
     "react/sort-prop-types": 2,
     "react/no-render-return-value": 0,
-    "react/jsx-indent-props": [2, 4],
+    "react/jsx-indent-props": [2, 4]
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }

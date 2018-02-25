@@ -1,41 +1,22 @@
 import React, {Component} from 'react'
-import {StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native'
+import {Text, View, Button, TouchableOpacity} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
 import {observer, inject} from 'mobx-react/native'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgb(245, 252, 255)',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: 'rgb(51, 51, 51)',
-    marginBottom: 5,
-  },
-})
-
 @inject('flashCardList')
 @observer
 class FlashcardsListScreen extends Component {
-  static navigationOptions = ({navigation, screenProps}) => {
+  static navigationOptions = ({navigation}) => {
     return {
       title: 'Flash Cards',
       headerRight: (
-        <Button title={'Add'} onPress={() => navigation.navigate('Add')} />
+        <Button onPress={() => navigation.navigate('Add')} title={'Add'} />
       ),
       headerLeft: (
         <Button
-          title={'Practise'}
-          onPress={() => navigation.navigate('View')}
+            onPress={() => navigation.navigate('View')}
+            title={'Practise'}
         />
       ),
     }
@@ -53,7 +34,7 @@ class FlashcardsListScreen extends Component {
     return (
       <Swipeout autoClose right={swipeoutBtns}>
         <TouchableOpacity
-          onPress={() =>
+            onPress={() =>
             this.props.navigation.navigate('Add', {id: flashcard.id})
           }>
           <View style={{padding: 8}}>
@@ -77,8 +58,8 @@ class FlashcardsListScreen extends Component {
     return (
       <View>
         <List
-          items={this.props.flashCardList.list}
-          renderItem={this.renderFlashCard}
+            items={this.props.flashCardList.list}
+            renderItem={this.renderFlashCard}
         />
       </View>
     )

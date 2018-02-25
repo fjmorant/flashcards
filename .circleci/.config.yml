@@ -13,8 +13,10 @@ jobs:
       - checkout
 
       - run: yarn install
+      - run: yarn lint:js
+      - run: yarn lint:ts
       - run: yarn test
-      - run: yarn flow
+      - run: yarn type-check
 test:
   override:
     - echo "done"

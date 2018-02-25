@@ -1,0 +1,15 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rules": {
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore"
+    ],
+    "object-literal-sort-keys": false,
+    "array-type": [true, "generic"],
+    "no-implicit-dependencies": false, // Does not work with tests
+    "no-submodule-imports": [true, "mobx-react"]
+  }
+}
