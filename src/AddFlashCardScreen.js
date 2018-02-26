@@ -23,6 +23,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 19,
   },
+  inputContainer: {flexDirection: 'row', alignItems: 'center'},
+  buttonContainer: {margin: 5},
 })
 
 @observer(['flashCardList'])
@@ -150,7 +152,7 @@ class AddFlashCardScreen extends Component<
               onClose={this.clearPickerOptions}
           />
         ) : null}
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={styles.inputContainer}>
           <Input
               height={35}
               onChangeText={this.changeName}
@@ -176,7 +178,7 @@ class AddFlashCardScreen extends Component<
             style={styles.input}
             value={this.flashcard.example}
         />
-        <View style={{margin: 5}}>
+        <View style={styles.buttonContainer}>
           <Button
               disabled={!this.shouldEnableSaveButton()}
               height={40}
@@ -188,7 +190,7 @@ class AddFlashCardScreen extends Component<
           />
         </View>
         {params.id ? (
-          <View style={{margin: 5}}>
+          <View style={styles.buttonContainer}>
             <Button
                 height={40}
                 onPress={this.toggleMasterFlashcard}

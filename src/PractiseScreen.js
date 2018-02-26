@@ -43,10 +43,22 @@ const styles = StyleSheet.create({
     fontSize: 25,
     textAlign: 'justify',
   },
+  arrowText: {color: 'black', fontSize: 35},
+  flashCardContainer: {flex: 1},
 })
 
-const FlashCard = ({name, meaning, mode, example}) => (
-  <View style={{flex: 1}}>
+const FlashCard = ({
+  name,
+  meaning,
+  mode,
+  example,
+}: {
+  name: string,
+  meaning: string,
+  mode: string,
+  example: string,
+}) => (
+  <View style={styles.flashCardContainer}>
     <View style={styles.flashcardHeaderContainer}>
       <Text style={styles.flashcardHeaderText}>{name}</Text>
     </View>
@@ -63,15 +75,22 @@ const FlashCard = ({name, meaning, mode, example}) => (
   </View>
 )
 
-const Arrow = ({title, onPress}) => (
+const Arrow = ({title, onPress}: {title: string, onPress: any}) => (
   <TouchableOpacity onPress={onPress}>
-    <Text style={{color: 'black', fontSize: 35}}>{title}</Text>
+    <Text style={styles.arrowText}>{title}</Text>
   </TouchableOpacity>
 )
 
 @inject('flashCardList')
 @observer
-class PractiseScreen extends Component {
+class PractiseScreen extends Component<
+  void,
+  {
+    flashCardList: any,
+    navigation: any,
+  },
+  void
+> {
   constructor() {
     super()
 
