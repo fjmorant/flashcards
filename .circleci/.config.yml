@@ -6,6 +6,11 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:8.8.1
       
+    dependencies:
+      override:
+        - yarn
+      cache_directories:
+        - ~/.cache/yarn
 
     working_directory: ~/repo
 
