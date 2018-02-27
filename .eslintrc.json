@@ -1,5 +1,6 @@
 {
   "plugins": ["react", "react-native"],
+  "extends": ["plugin:react/recommended", "plugin:react-native/all"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
@@ -17,7 +18,10 @@
     "react/jsx-sort-props": 2,
     "react/sort-prop-types": 2,
     "react/no-render-return-value": 0,
-    "react/jsx-indent-props": [2, 4]
+    "react/jsx-indent-props": [2, 4],
+    "react-native/no-color-literals": 0
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"]
+  "env": {
+    "jest": true
+  }
 }

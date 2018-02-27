@@ -1,12 +1,26 @@
 import React, {Component} from 'react'
-import {Text, View, Button, TouchableOpacity} from 'react-native'
+import {Text, View, Button, TouchableOpacity, StyleSheet} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
 import {observer, inject} from 'mobx-react/native'
 
+const styles = StyleSheet.create({
+  rowContainer: {padding: 8},
+  rowText: {
+    color: 'rgb(0,0,0)',
+  },
+})
+
 @inject('flashCardList')
 @observer
-class FlashcardsListScreen extends Component {
+class FlashcardsListScreen extends Component<
+  void,
+  {
+    flashCardList: any,
+    navigation: any,
+  },
+  void
+> {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Flash Cards',
@@ -37,15 +51,11 @@ class FlashcardsListScreen extends Component {
             onPress={() =>
             this.props.navigation.navigate('Add', {id: flashcard.id})
           }>
-          <View style={{padding: 8}}>
-            <Text style={{color: 'rgb(0,0,0)'}}>Name : {flashcard.name}</Text>
-            <Text style={{color: 'rgb(0,0,0)'}}>
-              Meaning : {flashcard.meaning}
-            </Text>
-            <Text style={{color: 'rgb(0,0,0)'}}>
-              Example : {flashcard.example}
-            </Text>
-            <Text style={{color: 'rgb(0,0,0)'}}>
+          <View style={styles.rowContainer}>
+            <Text style={styles.rowText}>Name : {flashcard.name}</Text>
+            <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
+            <Text style={styles.rowText}>Example : {flashcard.example}</Text>
+            <Text style={styles.rowText}>
               Mastered : {(flashcard.mastered || false).toString()}
             </Text>
           </View>

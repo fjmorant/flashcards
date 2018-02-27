@@ -1,16 +1,15 @@
-import React from 'react'
+import * as React from 'react'
 
 import {
   Dimensions,
-  StyleSheet,
-  View,
   Modal,
-  Text,
+  ModalProperties,
   ScrollView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native'
-
-import BaseComponent from './BaseComponent'
 
 const {height, width} = Dimensions.get('window')
 
@@ -22,8 +21,8 @@ const OPTION_CONTAINER_HEIGHT = 400
 
 const styles = StyleSheet.create({
   overlayStyle: {
-    width: width,
-    height: height,
+    width,
+    height,
     backgroundColor: 'rgba(0,0,0,0.7)',
   },
 
@@ -90,46 +89,40 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: FONT_SIZE,
   },
+  optionsContainer: {paddingHorizontal: 10},
 })
 
 let componentIndex = 0
 
-const defaultProps = {
-  data: [],
-  onChange: () => {},
-  initValue: 'Select me!',
-  style: {},
-  selectStyle: {},
-  optionStyle: {},
-  optionTextStyle: {},
-  sectionStyle: {},
-  sectionTextStyle: {},
-  cancelStyle: {},
-  cancelTextStyle: {},
-  overlayStyle: {},
-  cancelText: 'cancel',
+export interface IProps {
+  data: Array<any>
+  onChange: (item: any) => void
+  onClose: () => void
+  initValue: string
+  style: any
+  selectStyle: any
+  optionStyle: any
+  optionTextStyle: any
+  sectionStyle: any
+  sectionTextStyle: any
+  cancelStyle: any
+  cancelTextStyle: any
+  overlayStyle: any
+  cancelText: string
+  selectTextStyle: any
+  modalVisible: boolean
 }
 
-export default class ModalPicker extends BaseComponent {
-  props: {
-    data: Array,
-    onChange: Function,
-    initValue: String,
-    style: any,
-    selectStyle: any,
-    optionStyle: any,
-    optionTextStyle: any,
-    sectionStyle: any,
-    sectionTextStyle: any,
-    cancelStyle: any,
-    cancelTextStyle: any,
-    overlayStyle: any,
-    cancelText: String,
+export default class ModalPicker extends React.Component<IProps> {
+  public state: {
+    selected: string
+    modalVisible: boolean
+    transparent: boolean
+    animationType: ModalProperties['animationType']
   }
-  constructor() {
-    super()
 
-    this._bind('onChange', 'open', 'close', 'renderChildren')
+  constructor(props: IProps) {
+    super(props)
 
     this.state = {
       animationType: 'slide',
@@ -139,34 +132,34 @@ export default class ModalPicker extends BaseComponent {
     }
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.setState({selected: this.props.initValue})
     this.setState({cancelText: this.props.cancelText})
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.initValue != this.props.initValue) {
+  public componentWillReceiveProps(nextProps: IProps) {
+    if (nextProps.initValue !== this.props.initValue) {
       this.setState({selected: nextProps.initValue})
     }
   }
 
-  onChange(item) {
+  public onChange(item: any) {
     this.props.onChange(item)
     this.setState({selected: item.label})
     this.close()
   }
 
-  close() {
+  public close() {
     this.props.onClose()
   }
 
-  open() {
+  public open() {
     this.setState({
       modalVisible: true,
     })
   }
 
-  renderSection(section) {
+  public renderSection(section: any) {
     return (
       <View
         key={section.key}
@@ -178,7 +171,7 @@ export default class ModalPicker extends BaseComponent {
     )
   }
 
-  renderOption(option) {
+  public renderOption(option: any) {
     return (
       <TouchableOpacity key={option.key} onPress={() => this.onChange(option)}>
         <View style={[styles.optionStyle, this.props.optionStyle]}>
@@ -190,8 +183,8 @@ export default class ModalPicker extends BaseComponent {
     )
   }
 
-  renderOptionList() {
-    var options = this.props.data.map(item => {
+  public renderOptionList() {
+    const options = this.props.data.map(item => {
       if (item.section) {
         return this.renderSection(item)
       } else {
@@ -205,7 +198,7 @@ export default class ModalPicker extends BaseComponent {
         style={[styles.overlayStyle, this.props.overlayStyle]}>
         <View style={styles.optionContainer}>
           <ScrollView keyboardShouldPersistTaps>
-            <View style={{paddingHorizontal: 10}}>{options}</View>
+            <View style={styles.optionsContainer}>{options}</View>
           </ScrollView>
         </View>
         <View style={styles.cancelContainer}>
@@ -222,7 +215,7 @@ export default class ModalPicker extends BaseComponent {
     )
   }
 
-  renderChildren() {
+  public renderChildren() {
     if (this.props.children) {
       return this.props.children
     }
@@ -235,13 +228,12 @@ export default class ModalPicker extends BaseComponent {
     )
   }
 
-  render() {
+  public render() {
     return (
       <View style={this.props.style}>
         <Modal
           animationType={this.state.animationType}
           onRequestClose={this.close}
-          ref="modal"
           transparent
           visible={this.props.modalVisible}>
           {this.renderOptionList()}
@@ -250,5 +242,3 @@ export default class ModalPicker extends BaseComponent {
     )
   }
 }
-
-ModalPicker.defaultProps = defaultProps
