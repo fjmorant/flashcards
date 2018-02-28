@@ -22,7 +22,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: pwd
-      - run: cd ~/repo/android
+      - run: cd ~/repo/android/android
       - run: ./gradlew assembleRelease
 workflows:
   version: 2
