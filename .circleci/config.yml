@@ -24,6 +24,8 @@ jobs:
       - run: pwd
       - run: cd ~/repo/android/android
       - run: ./gradlew assembleRelease
+      environment:
+          TERM: dumb
 workflows:
   version: 2
   node:
