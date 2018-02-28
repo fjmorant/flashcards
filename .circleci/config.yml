@@ -21,7 +21,8 @@ jobs:
           path: ~/repo
       - attach_workspace:
           at: ~/repo
-      - run: cd android
+      - run: pwd
+      - run: cd ~/repo/android
       - run: ./gradlew assembleRelease
 workflows:
   version: 2
