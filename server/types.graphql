@@ -1,0 +1,32 @@
+type File @model {
+  contentType: String!
+  createdAt: DateTime!
+  id: ID! @isUnique
+  name: String!
+  secret: String! @isUnique
+  size: Int!
+  updatedAt: DateTime!
+  url: String! @isUnique
+}
+
+type Flashcard @model {
+  example: String!
+  id: ID! @isUnique
+  mastered: Boolean!
+  meaning: String!
+  name: String! @isUnique
+  user: User @relation(name: "UserOnFlashcard")
+}
+
+type User @model {
+  createdAt: DateTime!
+  flashcards: [Flashcard!]! @relation(name: "UserOnFlashcard")
+  id: ID! @isUnique
+  name: String! @isUnique
+  updatedAt: DateTime!
+}
+
+
+schema {
+  query: getFlashcardsByUser(user: User!): [Flashcard]!
+}

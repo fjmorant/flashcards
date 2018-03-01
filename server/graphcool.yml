@@ -1,0 +1,28 @@
+
+types: ./types.graphql
+
+
+#functions:
+#  hello:
+#    handler:
+#      code: src/hello.js
+#    type: resolver
+#    schema: src/hello.graphql
+
+permissions:
+- operation: File.read
+- operation: File.create
+- operation: File.update
+- operation: File.delete
+- operation: Flashcard.read
+- operation: Flashcard.create
+- operation: Flashcard.update
+- operation: Flashcard.delete
+- operation: User.read
+- operation: User.create
+- operation: User.update
+- operation: User.delete
+- operation: UserOnFlashcard.*
+rootTokens:
+- access
+
