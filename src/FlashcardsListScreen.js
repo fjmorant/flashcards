@@ -3,6 +3,23 @@ import {Text, View, Button, TouchableOpacity, StyleSheet} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
 import {observer, inject} from 'mobx-react/native'
+import gql from 'graphql-tag'
+import {graphql} from 'react-apollo'
+
+const query = gql`
+  query GetFlashcardsByUser {
+    User(id: "cje8649pvb3u201775435vabn") {
+      name
+      flashcards {
+        id
+        name
+        example
+        mastered
+        meaning
+      }
+    }
+  }
+`
 
 const styles = StyleSheet.create({
   rowContainer: {padding: 8},
@@ -65,15 +82,37 @@ class FlashcardsListScreen extends Component<
   }
 
   render() {
+    const loading = this.props.data.loading
+    const error = this.props.data.error
+
+    console.log(this.props.data)
+
+    if (loading) {
+      return (
+        <View>
+          <Text>Loading</Text>
+        </View>
+      )
+    }
+
+    if (error) {
+      return (
+        <View>
+          <Text>Error found</Text>
+        </View>
+      )
+    }
+
+    const flashcards = this.props.data.User.flashcards
+
     return (
       <View>
-        <List
-            items={this.props.flashCardList.list}
-            renderItem={this.renderFlashCard}
-        />
+        <List items={flashcards} renderItem={this.renderFlashCard} />
       </View>
     )
   }
 }
 
-export default FlashcardsListScreen
+export default graphql(query, {options: {pollInterval: 5000}})(
+  FlashcardsListScreen
+)

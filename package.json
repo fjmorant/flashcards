@@ -11,11 +11,18 @@
     "check-app": "yarn type-check && yarn test && yarn lint:js && yarn lint:ts"
   },
   "dependencies": {
+    "apollo-boost": "^0.1.1",
+    "apollo-cache-inmemory": "^1.1.9",
+    "apollo-client": "^2.2.5",
+    "apollo-link-http": "^1.5.2",
     "codecov": "^3.0.0",
+    "graphql": "^0.13.1",
+    "graphql-tag": "^2.8.0",
     "immutable": "3.8.2",
     "mobx": "^3.2.2",
     "mobx-react": "^4.3.5",
     "react": "16.2.0",
+    "react-apollo": "^2.0.4",
     "react-native": "0.52.2",
     "react-native-navbar": "^2.1.0",
     "react-native-swipeout": "2.3.3",
