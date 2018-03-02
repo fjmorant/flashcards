@@ -4,19 +4,27 @@ import List from './common/List'
 import Swipeout from 'react-native-swipeout'
 import {observer, inject} from 'mobx-react/native'
 import gql from 'graphql-tag'
-import {graphql} from 'react-apollo'
+import {graphql, compose} from 'react-apollo'
 
-const query = gql`
+const flashcardsQuery = gql`
   query GetFlashcardsByUser {
     User(id: "cje8649pvb3u201775435vabn") {
       name
-      flashcards {
+      flashcards(orderBy: id_DESC) {
         id
         name
         example
         mastered
         meaning
       }
+    }
+  }
+`
+const deleteFlashcardMutation = gql`
+  mutation DeleteFlashcard($id: ID!) {
+    deleteFlashcard(id: $id) {
+      id
+      name
     }
   }
 `
@@ -28,8 +36,6 @@ const styles = StyleSheet.create({
   },
 })
 
-@inject('flashCardList')
-@observer
 class FlashcardsListScreen extends Component<
   void,
   {
@@ -58,16 +64,34 @@ class FlashcardsListScreen extends Component<
       {
         text: 'Delete',
         backgroundColor: 'red',
-        onPress: () => this.props.flashCardList.delete(flashcard.id),
+        onPress: () => {
+          this.props
+            .mutate({
+              variables: {
+                id: flashcard.id,
+              },
+              optimisticResponse: {
+                deleteFlashcard: {
+                  __typename: 'Flashcard',
+                  id: flashcard.id,
+                  name: flashcard.name,
+                },
+              },
+            })
+            .then(({data}) => {
+              console.log('Success!!!')
+            })
+            .catch(error => {
+              console.log(error)
+              alert('Error deleting flashcard')
+            })
+        },
       },
     ]
 
     return (
       <Swipeout autoClose right={swipeoutBtns}>
-        <TouchableOpacity
-            onPress={() =>
-            this.props.navigation.navigate('Add', {id: flashcard.id})
-          }>
+        <TouchableOpacity>
           <View style={styles.rowContainer}>
             <Text style={styles.rowText}>Name : {flashcard.name}</Text>
             <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
@@ -84,8 +108,6 @@ class FlashcardsListScreen extends Component<
   render() {
     const loading = this.props.data.loading
     const error = this.props.data.error
-
-    console.log(this.props.data)
 
     if (loading) {
       return (
@@ -113,6 +135,7 @@ class FlashcardsListScreen extends Component<
   }
 }
 
-export default graphql(query, {options: {pollInterval: 5000}})(
-  FlashcardsListScreen
-)
+export default compose(
+  graphql(flashcardsQuery, {options: {pollInterval: 2000}}),
+  graphql(deleteFlashcardMutation)
+)(FlashcardsListScreen)

@@ -63451,13 +63451,12 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  var _dec,
-      _class,
-      _class2,
+  var _class,
       _temp2,
       _jsxFileName = "/Users/morant84/Work/FlashCards/src/FlashcardsListScreen.js";
 
-  var _templateObject = _taggedTemplateLiteral(["\n  query GetFlashcardsByUser {\n    User(id: \"cje8649pvb3u201775435vabn\") {\n      name\n      flashcards {\n        id\n        name\n        example\n        mastered\n        meaning\n      }\n    }\n  }\n"], ["\n  query GetFlashcardsByUser {\n    User(id: \"cje8649pvb3u201775435vabn\") {\n      name\n      flashcards {\n        id\n        name\n        example\n        mastered\n        meaning\n      }\n    }\n  }\n"]);
+  var _templateObject = _taggedTemplateLiteral(["\n  query GetFlashcardsByUser {\n    User(id: \"cje8649pvb3u201775435vabn\") {\n      name\n      flashcards(orderBy: id_DESC) {\n        id\n        name\n        example\n        mastered\n        meaning\n      }\n    }\n  }\n"], ["\n  query GetFlashcardsByUser {\n    User(id: \"cje8649pvb3u201775435vabn\") {\n      name\n      flashcards(orderBy: id_DESC) {\n        id\n        name\n        example\n        mastered\n        meaning\n      }\n    }\n  }\n"]),
+      _templateObject2 = _taggedTemplateLiteral(["\n  mutation DeleteFlashcard($id: ID!) {\n    deleteFlashcard(id: $id) {\n      id\n      name\n    }\n  }\n"], ["\n  mutation DeleteFlashcard($id: ID!) {\n    deleteFlashcard(id: $id) {\n      id\n      name\n    }\n  }\n"]);
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
@@ -63506,7 +63505,8 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }
 
-  var query = (0, _graphqlTag2.default)(_templateObject);
+  var flashcardsQuery = (0, _graphqlTag2.default)(_templateObject);
+  var deleteFlashcardMutation = (0, _graphqlTag2.default)(_templateObject2);
 
   var styles = _reactNative.StyleSheet.create({
     rowContainer: {
@@ -63517,7 +63517,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }
   });
 
-  var FlashcardsListScreen = _wrapComponent("FlashcardsListScreen")((_dec = (0, _native.inject)('flashCardList'), _dec(_class = (0, _native.observer)(_class = (_temp2 = _class2 = function (_Component) {
+  var FlashcardsListScreen = _wrapComponent("FlashcardsListScreen")((_temp2 = _class = function (_Component) {
     _inherits(FlashcardsListScreen, _Component);
 
     function FlashcardsListScreen() {
@@ -63536,7 +63536,24 @@ __d(function (global, require, module, exports, _dependencyMap) {
           text: 'Delete',
           backgroundColor: 'red',
           onPress: function onPress() {
-            return _this.props.flashCardList.delete(flashcard.id);
+            _this.props.mutate({
+              variables: {
+                id: flashcard.id
+              },
+              optimisticResponse: {
+                deleteFlashcard: {
+                  __typename: 'Flashcard',
+                  id: flashcard.id,
+                  name: flashcard.name
+                }
+              }
+            }).then(function (_ref2) {
+              var data = _ref2.data;
+              console.log('Success!!!');
+            }).catch(function (error) {
+              console.log(error);
+              alert('Error deleting flashcard');
+            });
           }
         }];
         return _react3.default.createElement(
@@ -63546,20 +63563,15 @@ __d(function (global, require, module, exports, _dependencyMap) {
             right: swipeoutBtns,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 66
+              lineNumber: 93
             }
           },
           _react3.default.createElement(
             _reactNative.TouchableOpacity,
             {
-              onPress: function onPress() {
-                return _this.props.navigation.navigate('Add', {
-                  id: flashcard.id
-                });
-              },
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 67
+                lineNumber: 94
               }
             },
             _react3.default.createElement(
@@ -63568,7 +63580,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                 style: styles.rowContainer,
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 71
+                  lineNumber: 95
                 }
               },
               _react3.default.createElement(
@@ -63577,7 +63589,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                   style: styles.rowText,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 72
+                    lineNumber: 96
                   }
                 },
                 "Name : ",
@@ -63589,7 +63601,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                   style: styles.rowText,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 73
+                    lineNumber: 97
                   }
                 },
                 "Meaning : ",
@@ -63601,7 +63613,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                   style: styles.rowText,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 74
+                    lineNumber: 98
                   }
                 },
                 "Example : ",
@@ -63613,7 +63625,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                   style: styles.rowText,
                   __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 75
+                    lineNumber: 99
                   }
                 },
                 "Mastered : ",
@@ -63630,7 +63642,6 @@ __d(function (global, require, module, exports, _dependencyMap) {
       value: function render() {
         var loading = this.props.data.loading;
         var error = this.props.data.error;
-        console.log(this.props.data);
 
         if (loading) {
           return _react3.default.createElement(
@@ -63638,7 +63649,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 92
+                lineNumber: 114
               }
             },
             _react3.default.createElement(
@@ -63646,7 +63657,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               {
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 93
+                  lineNumber: 115
                 }
               },
               "Loading"
@@ -63660,7 +63671,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 100
+                lineNumber: 122
               }
             },
             _react3.default.createElement(
@@ -63668,7 +63679,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               {
                 __source: {
                   fileName: _jsxFileName,
-                  lineNumber: 101
+                  lineNumber: 123
                 }
               },
               "Error found"
@@ -63682,7 +63693,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 109
+              lineNumber: 131
             }
           },
           _react3.default.createElement(_List2.default, {
@@ -63690,7 +63701,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             renderItem: this.renderFlashCard,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 110
+              lineNumber: 132
             }
           })
         );
@@ -63698,8 +63709,8 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }]);
 
     return FlashcardsListScreen;
-  }(_react2.Component), _class2.navigationOptions = function (_ref2) {
-    var navigation = _ref2.navigation;
+  }(_react2.Component), _class.navigationOptions = function (_ref3) {
+    var navigation = _ref3.navigation;
     return {
       title: 'Flash Cards',
       headerRight: _react3.default.createElement(_reactNative.Button, {
@@ -63709,7 +63720,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
         title: 'Add',
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 45
+          lineNumber: 51
         }
       }),
       headerLeft: _react3.default.createElement(_reactNative.Button, {
@@ -63719,17 +63730,17 @@ __d(function (global, require, module, exports, _dependencyMap) {
         title: 'Practise',
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 48
+          lineNumber: 54
         }
       })
     };
-  }, _temp2)) || _class) || _class));
+  }, _temp2));
 
-  exports.default = (0, _reactApollo.graphql)(query, {
+  exports.default = (0, _reactApollo.compose)((0, _reactApollo.graphql)(flashcardsQuery, {
     options: {
-      pollInterval: 5000
+      pollInterval: 2000
     }
-  })(FlashcardsListScreen);
+  }), (0, _reactApollo.graphql)(deleteFlashcardMutation))(FlashcardsListScreen);
 },502,[13,23,179,629,504,177,646,661],"FlashCards/src/FlashcardsListScreen.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
@@ -65540,6 +65551,8 @@ __d(function (global, require, module, exports, _dependencyMap) {
       _temp,
       _jsxFileName = "/Users/morant84/Work/FlashCards/src/AddFlashCardScreen.js";
 
+  var _templateObject = _taggedTemplateLiteral(["\n  mutation submitNewFlashcard(\n    $name: String!\n    $meaning: String!\n    $example: String!\n    $mastered: Boolean!\n  ) {\n    createFlashcard(\n      name: $name\n      meaning: $meaning\n      example: $example\n      mastered: $mastered\n      userId: \"cje8649pvb3u201775435vabn\"\n    ) {\n      id\n    }\n  }\n"], ["\n  mutation submitNewFlashcard(\n    $name: String!\n    $meaning: String!\n    $example: String!\n    $mastered: Boolean!\n  ) {\n    createFlashcard(\n      name: $name\n      meaning: $meaning\n      example: $example\n      mastered: $mastered\n      userId: \"cje8649pvb3u201775435vabn\"\n    ) {\n      id\n    }\n  }\n"]);
+
   var _reactNative = require(_dependencyMap[2], "react-native");
 
   var _Input = require(_dependencyMap[3], "./common/Input");
@@ -65568,7 +65581,15 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _FlashCard2 = _interopRequireDefault(_FlashCard);
 
+  var _reactApollo = require(_dependencyMap[10], "react-apollo");
+
+  var _graphqlTag = require(_dependencyMap[11], "graphql-tag");
+
+  var _graphqlTag2 = _interopRequireDefault(_graphqlTag);
+
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -65693,6 +65714,24 @@ __d(function (global, require, module, exports, _dependencyMap) {
         });
       };
 
+      _this.onPressSaveButton = function () {
+        _this.props.mutate({
+          variables: {
+            name: _this.flashcard.name,
+            meaning: _this.flashcard.meaning,
+            example: _this.flashcard.example,
+            mastered: false
+          }
+        }).then(function (_ref) {
+          var data = _ref.data;
+
+          _this.props.navigation.goBack();
+        }).catch(function (error) {
+          console.log(error);
+          alert('Error saving flashcard');
+        });
+      };
+
       _this.state = {
         modalVisible: false,
         pickerOptions: []
@@ -65713,8 +65752,6 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }, {
       key: "render",
       value: function render() {
-        var _this2 = this;
-
         var _props$navigation$sta = this.props.navigation.state.params,
             params = _props$navigation$sta === undefined ? {} : _props$navigation$sta;
         return _react3.default.createElement(
@@ -65723,7 +65760,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             style: styles.container,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 142
+              lineNumber: 163
             }
           },
           this.state.pickerOptions.size > 0 ? _react3.default.createElement(_ModalPicker2.default, {
@@ -65739,7 +65776,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             onClose: this.clearPickerOptions,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 144
+              lineNumber: 165
             }
           }) : null,
           _react3.default.createElement(
@@ -65748,7 +65785,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               style: styles.inputContainer,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 155
+                lineNumber: 176
               }
             },
             _react3.default.createElement(_Input2.default, {
@@ -65760,7 +65797,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               value: this.flashcard.name,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 156
+                lineNumber: 177
               }
             }),
             _react3.default.createElement(_reactNative.Button, {
@@ -65768,7 +65805,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               title: 'Find',
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 164
+                lineNumber: 185
               }
             })
           ),
@@ -65779,7 +65816,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             value: this.flashcard.meaning,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 169
+              lineNumber: 190
             }
           }),
           _react3.default.createElement(_InputArea2.default, {
@@ -65789,7 +65826,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             value: this.flashcard.example,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 175
+              lineNumber: 196
             }
           }),
           _react3.default.createElement(
@@ -65798,21 +65835,17 @@ __d(function (global, require, module, exports, _dependencyMap) {
               style: styles.buttonContainer,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 181
+                lineNumber: 202
               }
             },
             _react3.default.createElement(_Button2.default, {
               disabled: !this.shouldEnableSaveButton(),
               height: 40,
-              onPress: function onPress() {
-                _this2.props.flashCardList.add(_this2.flashcard);
-
-                _this2.props.navigation.goBack();
-              },
+              onPress: this.onPressSaveButton,
               title: "Save",
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 182
+                lineNumber: 203
               }
             })
           ),
@@ -65822,7 +65855,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               style: styles.buttonContainer,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 193
+                lineNumber: 211
               }
             },
             _react3.default.createElement(_Button2.default, {
@@ -65831,7 +65864,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               title: this.props.mastered ? 'Mark as Unmastered' : 'Mark as Mastered',
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 194
+                lineNumber: 212
               }
             })
           ) : null
@@ -65847,8 +65880,9 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }, _temp)) || _class));
 
-  exports.default = AddFlashCardScreen;
-},515,[13,23,179,626,628,518,627,523,177,531],"FlashCards/src/AddFlashCardScreen.js");
+  var createNewFlashcard = (0, _graphqlTag2.default)(_templateObject);
+  exports.default = (0, _reactApollo.graphql)(createNewFlashcard)(AddFlashCardScreen);
+},515,[13,23,179,626,628,518,627,523,177,531,661,646],"FlashCards/src/AddFlashCardScreen.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true

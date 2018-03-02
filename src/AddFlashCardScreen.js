@@ -12,6 +12,8 @@ import ModalPicker from './common/ModalPicker'
 import request from 'superagent'
 import {observer} from 'mobx-react/native'
 import FlashCard from './FlashCard'
+import {graphql} from 'react-apollo'
+import gql from 'graphql-tag'
 
 const styles = StyleSheet.create({
   container: {
@@ -135,6 +137,25 @@ class AddFlashCardScreen extends Component<
     })
   }
 
+  onPressSaveButton = () => {
+    this.props
+      .mutate({
+        variables: {
+          name: this.flashcard.name,
+          meaning: this.flashcard.meaning,
+          example: this.flashcard.example,
+          mastered: false,
+        },
+      })
+      .then(({data}) => {
+        this.props.navigation.goBack()
+      })
+      .catch(error => {
+        console.log(error)
+        alert('Error saving flashcard')
+      })
+  }
+
   render() {
     const {state: {params = {}}} = this.props.navigation
 
@@ -182,10 +203,7 @@ class AddFlashCardScreen extends Component<
           <Button
               disabled={!this.shouldEnableSaveButton()}
               height={40}
-              onPress={() => {
-              this.props.flashCardList.add(this.flashcard)
-              this.props.navigation.goBack()
-            }}
+              onPress={this.onPressSaveButton}
               title="Save"
           />
         </View>
@@ -205,4 +223,23 @@ class AddFlashCardScreen extends Component<
   }
 }
 
-export default AddFlashCardScreen
+const createNewFlashcard = gql`
+  mutation submitNewFlashcard(
+    $name: String!
+    $meaning: String!
+    $example: String!
+    $mastered: Boolean!
+  ) {
+    createFlashcard(
+      name: $name
+      meaning: $meaning
+      example: $example
+      mastered: $mastered
+      userId: "cje8649pvb3u201775435vabn"
+    ) {
+      id
+    }
+  }
+`
+
+export default graphql(createNewFlashcard)(AddFlashCardScreen)
