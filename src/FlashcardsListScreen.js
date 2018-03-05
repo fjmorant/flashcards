@@ -1,8 +1,14 @@
 import React, {Component} from 'react'
-import {Text, View, Button, TouchableOpacity, StyleSheet} from 'react-native'
+import {
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+} from 'react-native'
 import List from './common/List'
 import Swipeout from 'react-native-swipeout'
-import {observer, inject} from 'mobx-react/native'
 import gql from 'graphql-tag'
 import {graphql, compose} from 'react-apollo'
 
@@ -59,7 +65,7 @@ class FlashcardsListScreen extends Component<
     }
   }
 
-  renderFlashCard = flashcard => {
+  renderFlashCard = ({item: flashcard}) => {
     const swipeoutBtns = [
       {
         text: 'Delete',
@@ -70,13 +76,11 @@ class FlashcardsListScreen extends Component<
               variables: {
                 id: flashcard.id,
               },
-              optimisticResponse: {
-                deleteFlashcard: {
-                  __typename: 'Flashcard',
-                  id: flashcard.id,
-                  name: flashcard.name,
+              refetchQueries: [
+                {
+                  query: flashcardsQuery,
                 },
-              },
+              ],
             })
             .then(({data}) => {
               console.log('Success!!!')
@@ -105,11 +109,14 @@ class FlashcardsListScreen extends Component<
     )
   }
 
+  _keyExtractor = item => item.id
+
   render() {
     const loading = this.props.data.loading
     const error = this.props.data.error
 
     if (loading) {
+      console.log('Loading')
       return (
         <View>
           <Text>Loading</Text>
@@ -118,6 +125,7 @@ class FlashcardsListScreen extends Component<
     }
 
     if (error) {
+      console.log('Error: ', error)
       return (
         <View>
           <Text>Error found</Text>
@@ -127,15 +135,25 @@ class FlashcardsListScreen extends Component<
 
     const flashcards = this.props.data.User.flashcards
 
+    console.log('Render: ', JSON.stringify(flashcards))
     return (
       <View>
-        <List items={flashcards} renderItem={this.renderFlashCard} />
+        {flashcards.map(flashcard => this.renderFlashCard({item: flashcard}))}
       </View>
     )
   }
 }
 
+// <FlatList
+//     data={flashcards}
+//     extraData={{numberFlashcards: this.props.data.User.flashcards.length}}
+//     keyExtractor={this._keyExtractor}
+//     onRefresh={() => this.props.data.refetch()}
+//     refreshing={this.props.data.networkStatus === 4}
+//     renderItem={this.renderFlashCard}
+// />
+
 export default compose(
-  graphql(flashcardsQuery, {options: {pollInterval: 2000}}),
+  graphql(flashcardsQuery),
   graphql(deleteFlashcardMutation)
 )(FlashcardsListScreen)

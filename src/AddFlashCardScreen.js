@@ -10,8 +10,6 @@ import InputArea from './common/InputArea'
 import Button from './common/Button'
 import ModalPicker from './common/ModalPicker'
 import request from 'superagent'
-import {observer} from 'mobx-react/native'
-import FlashCard from './FlashCard'
 import {graphql} from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -29,7 +27,6 @@ const styles = StyleSheet.create({
   buttonContainer: {margin: 5},
 })
 
-@observer(['flashCardList'])
 class AddFlashCardScreen extends Component<
   void,
   {

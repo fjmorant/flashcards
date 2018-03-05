@@ -1,4 +1,3 @@
-import {observer, inject} from 'mobx-react/native'
 import React, {Component} from 'react'
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
@@ -81,8 +80,6 @@ const Arrow = ({title, onPress}: {title: string, onPress: any}) => (
   </TouchableOpacity>
 )
 
-@inject('flashCardList')
-@observer
 class PractiseScreen extends Component<
   void,
   {
