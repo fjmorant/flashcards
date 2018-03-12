@@ -34,17 +34,19 @@ const styles = StyleSheet.create({
   },
   inputContainer: {flexDirection: 'row', alignItems: 'center'},
   buttonContainer: {margin: 5},
+  loadingView: {alignItems: 'center', justifyContent: 'center', flex: 1},
 })
 
-class AddFlashCardScreen extends Component<
-  void,
-  {
-    navigation: any,
-    flashCardList: any,
-    mastered: boolean,
+class AddFlashCardScreen extends Component<{
+  navigation: any,
+  flashCardList: any,
+  mastered: boolean,
+  data: {
+    Flashcard: any,
+    loading: boolean,
   },
-  void
-> {
+  mutate: Function,
+}> {
   static navigationOptions = () => ({
     title: 'Edit Flash Card',
     headerRight: null,
@@ -214,7 +216,7 @@ class AddFlashCardScreen extends Component<
 
     if (this.props.data.loading && params.id) {
       return (
-        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <View style={styles.loadingView}>
           <ActivityIndicator />
         </View>
       )

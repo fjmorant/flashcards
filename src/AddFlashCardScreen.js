@@ -32,15 +32,12 @@ const styles = StyleSheet.create({
   buttonContainer: {margin: 5},
 })
 
-class AddFlashCardScreen extends Component<
-  void,
-  {
-    navigation: any,
-    flashCardList: any,
-    mastered: boolean,
-  },
-  void
-> {
+export class AddFlashCardScreen extends Component<{
+  navigation: any,
+  flashCardList: any,
+  mastered: boolean,
+  mutate: Function,
+}> {
   static navigationOptions = () => ({
     title: 'Add Flash Cards',
     headerRight: null,

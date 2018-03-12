@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   },
   arrowText: {color: 'black', fontSize: 35},
   flashCardContainer: {flex: 1},
+  loadingView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 })
 
 const FlashCard = ({
@@ -83,14 +84,16 @@ const Arrow = ({title, onPress}: {title: string, onPress: any}) => (
   </TouchableOpacity>
 )
 
-class PractiseScreen extends Component<
-  void,
-  {
-    flashCardList: any,
-    navigation: any,
+export class PractiseScreen extends Component<{
+  flashCardList: any,
+  navigation: any,
+  data: {
+    loading: boolean,
+    User: {
+      flashcards: Array<any>,
+    },
   },
-  void
-> {
+}> {
   constructor() {
     super()
 
@@ -145,7 +148,7 @@ class PractiseScreen extends Component<
 
     if (loading) {
       return (
-        <View style={{flex: 1}}>
+        <View style={styles.loadingView}>
           <Text>Loading</Text>
         </View>
       )

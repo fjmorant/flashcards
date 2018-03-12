@@ -18,9 +18,20 @@ const styles = StyleSheet.create({
   rowText: {
     color: 'rgb(0,0,0)',
   },
+  loadingView: {alignItems: 'center', justifyContent: 'center', flex: 1},
 })
 
-class FlashcardsListScreen extends React.Component {
+export class FlashcardsListScreen extends React.Component<{
+  navigation: any,
+  mutate: Function,
+  data: {
+    loading: boolean,
+    refetch: Function,
+    User: {
+      flashcards: Array<any>,
+    },
+  },
+}> {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Flash Cards',
@@ -95,7 +106,7 @@ class FlashcardsListScreen extends React.Component {
   render() {
     if (this.props.data.loading) {
       return (
-        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <View style={styles.loadingView}>
           <ActivityIndicator />
         </View>
       )
