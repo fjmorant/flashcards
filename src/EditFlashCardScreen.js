@@ -65,8 +65,8 @@ class AddFlashCardScreen extends Component<
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.data.allFlashcards) {
-      const flashcard = nextProps.data.allFlashcards[0]
+    if (nextProps && nextProps.data.Flashcard) {
+      const flashcard = nextProps.data.Flashcard
 
       this.setState({
         id: flashcard.id,
@@ -83,11 +83,12 @@ class AddFlashCardScreen extends Component<
   }
 
   toggleMasterFlashcard = () => {
-    this.setState({
-      mastered: !this.state.mastered,
-    })
-
-    this.onPressSaveButton()
+    this.setState(
+      {
+        mastered: !this.state.mastered,
+      },
+      () => this.onPressSaveButton()
+    )
   }
 
   changeName = (name: string) => {
@@ -288,7 +289,6 @@ export default compose(
     options: props => ({
       variables: {
         flashCardId: props.navigation.state.params.id,
-        userId: 'cje8649pvb3u201775435vabn',
       },
     }),
   }),

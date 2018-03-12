@@ -29,8 +29,9 @@ export const deleteFlashcardMutation = gql`
 `
 
 export const getFlashCardByIdAndUser = gql`
-  query GetFlashcardByIdAndUser($flashCardId: ID!, $userId: ID!) {
-    allFlashcards(filter: {id: $flashCardId, user: {id: $userId}}) {
+  query GetFlashcardByIdAndUser($flashCardId: ID!) {
+    __typename
+    Flashcard(id: $flashCardId) {
       id
       name
       example

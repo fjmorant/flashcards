@@ -7,6 +7,7 @@ import {ApolloClient} from 'apollo-client'
 import {HttpLink} from 'apollo-link-http'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 import {ApolloProvider} from 'react-apollo'
+import {toIdValue} from 'apollo-utilities'
 
 import {StackNavigator} from 'react-navigation'
 
@@ -25,7 +26,20 @@ export default class App extends React.Component {
       link: new HttpLink({
         uri: 'https://api.graph.cool/simple/v1/cje7l288q0wgk0115qob7qdrt',
       }),
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        cacheRedirects: {
+          Query: {
+            Flashcard: (_, args) => {
+              return toIdValue(
+                this.client.cache.config.dataIdFromObject({
+                  __typename: 'Flashcard',
+                  id: args.id,
+                })
+              )
+            },
+          },
+        },
+      }),
     })
   }
   render() {
