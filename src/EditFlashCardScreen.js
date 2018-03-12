@@ -16,7 +16,11 @@ import gql from 'graphql-tag'
 import shortid from 'shortid'
 import moment from 'moment'
 
-import {flashcardsQuery, getFlashCardByIdAndUser} from './queries'
+import {
+  flashcardsQuery,
+  updateFlashcard,
+  getFlashCardByIdAndUser,
+} from './queries'
 
 const styles = StyleSheet.create({
   container: {
@@ -30,16 +34,21 @@ const styles = StyleSheet.create({
   },
   inputContainer: {flexDirection: 'row', alignItems: 'center'},
   buttonContainer: {margin: 5},
+  loadingView: {alignItems: 'center', justifyContent: 'center', flex: 1},
 })
 
-export class AddFlashCardScreen extends Component<{
+class AddFlashCardScreen extends Component<{
   navigation: any,
   flashCardList: any,
   mastered: boolean,
+  data: {
+    Flashcard: any,
+    loading: boolean,
+  },
   mutate: Function,
 }> {
   static navigationOptions = () => ({
-    title: 'Add Flash Cards',
+    title: 'Edit Flash Card',
     headerRight: null,
   })
 
@@ -49,10 +58,25 @@ export class AddFlashCardScreen extends Component<{
     this.state = {
       modalVisible: false,
       pickerOptions: [],
+      id: '',
       name: '',
       meaning: '',
       example: '',
       mastered: false,
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.data.Flashcard) {
+      const flashcard = nextProps.data.Flashcard
+
+      this.setState({
+        id: flashcard.id,
+        name: flashcard.name,
+        meaning: flashcard.meaning,
+        example: flashcard.example,
+        mastered: flashcard.mastered,
+      })
     }
   }
 
@@ -61,9 +85,12 @@ export class AddFlashCardScreen extends Component<{
   }
 
   toggleMasterFlashcard = () => {
-    this.flashcard.toggleMaster()
-    this.props.flashCardList.edit(this.flashcard)
-    this.props.navigation.goBack()
+    this.setState(
+      {
+        mastered: !this.state.mastered,
+      },
+      () => this.onPressSaveButton()
+    )
   }
 
   changeName = (name: string) => {
@@ -140,25 +167,26 @@ export class AddFlashCardScreen extends Component<{
     this.props
       .mutate({
         variables: {
+          id: this.state.id,
           name: this.state.name,
           meaning: this.state.meaning,
           example: this.state.example,
-          mastered: false,
+          mastered: this.state.mastered,
         },
         update: proxy => {
           const data = proxy.readQuery({query: flashcardsQuery})
-          const newFlashcards = [
-            {
-              __typename: 'Flashcard',
-              createdAt: moment().toISOString(),
-              id: shortid.generate(),
-              name: this.state.name,
-              meaning: this.state.meaning,
-              example: this.state.example,
-              mastered: false,
-            },
-            ...data.User.flashcards,
-          ]
+          const oldFlashcard = data.User.flashcards.find(
+            item => item.id === this.state.id
+          )
+          const indexOld = data.User.flashcards.indexOf(oldFlashcard)
+
+          data.User.flashcards[indexOld] = {
+            ...oldFlashcard,
+            name: this.state.name,
+            meaning: this.state.meaning,
+            example: this.state.example,
+            mastered: this.state.mastered,
+          }
 
           proxy.writeQuery({
             query: flashcardsQuery,
@@ -166,7 +194,7 @@ export class AddFlashCardScreen extends Component<{
               ...data,
               User: {
                 ...data.User,
-                flashcards: newFlashcards,
+                flashcards: data.User.flashcards,
               },
             },
           })
@@ -182,6 +210,18 @@ export class AddFlashCardScreen extends Component<{
   }
 
   render() {
+    const {state: {params = {}}} = this.props.navigation || {
+      state: {params: {}},
+    }
+
+    if (this.props.data.loading && params.id) {
+      return (
+        <View style={styles.loadingView}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
+
     return (
       <View style={styles.container}>
         {this.state.pickerOptions.size > 0 ? (
@@ -230,32 +270,29 @@ export class AddFlashCardScreen extends Component<{
               title="Save"
           />
         </View>
+        {params.id ? (
+          <View style={styles.buttonContainer}>
+            <Button
+                height={40}
+                onPress={this.toggleMasterFlashcard}
+                title={
+                this.state.mastered ? 'Mark as Unmastered' : 'Mark as Mastered'
+              }
+            />
+          </View>
+        ) : null}
       </View>
     )
   }
 }
 
-const createNewFlashcard = gql`
-  mutation submitNewFlashcard(
-    $name: String!
-    $meaning: String!
-    $example: String!
-    $mastered: Boolean!
-  ) {
-    createFlashcard(
-      name: $name
-      meaning: $meaning
-      example: $example
-      mastered: $mastered
-      userId: "cje8649pvb3u201775435vabn"
-    ) {
-      id
-      name
-      meaning
-      example
-      mastered
-    }
-  }
-`
-
-export default graphql(createNewFlashcard)(AddFlashCardScreen)
+export default compose(
+  graphql(getFlashCardByIdAndUser, {
+    options: props => ({
+      variables: {
+        flashCardId: props.navigation.state.params.id,
+      },
+    }),
+  }),
+  graphql(updateFlashcard)
+)(AddFlashCardScreen)

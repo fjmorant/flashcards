@@ -1,6 +1,8 @@
-import {observer, inject} from 'mobx-react/native'
 import React, {Component} from 'react'
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+
+import {graphql} from 'react-apollo'
+import {flashcardsQuery, deleteFlashcardMutation} from './queries'
 
 const styles = StyleSheet.create({
   container: {
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
   },
   arrowText: {color: 'black', fontSize: 35},
   flashCardContainer: {flex: 1},
+  loadingView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 })
 
 const FlashCard = ({
@@ -81,16 +84,16 @@ const Arrow = ({title, onPress}: {title: string, onPress: any}) => (
   </TouchableOpacity>
 )
 
-@inject('flashCardList')
-@observer
-class PractiseScreen extends Component<
-  void,
-  {
-    flashCardList: any,
-    navigation: any,
+export class PractiseScreen extends Component<{
+  flashCardList: any,
+  navigation: any,
+  data: {
+    loading: boolean,
+    User: {
+      flashcards: Array<any>,
+    },
   },
-  void
-> {
+}> {
   constructor() {
     super()
 
@@ -104,7 +107,7 @@ class PractiseScreen extends Component<
   }
 
   componentWillMount() {
-    if (!this.props.flashCardList.list.length) {
+    if (!this.props.data.loading && !this.props.data.User.flashcards.length) {
       const {goBack} = this.props.navigation
 
       goBack()
@@ -119,7 +122,7 @@ class PractiseScreen extends Component<
   }
 
   goNextCard() {
-    const numFlashcards = this.props.flashCardList.list.length
+    const numFlashcards = this.props.data.User.flashcards.length
     const oldIndex = this.state.flashcardIndex
     const flashcardIndex =
       oldIndex < numFlashcards - 1 ? oldIndex + 1 : numFlashcards - 1
@@ -141,8 +144,18 @@ class PractiseScreen extends Component<
 
   render() {
     const {goBack} = this.props.navigation
-    const flashcard = this.props.flashCardList.list[this.state.flashcardIndex]
-    const numFlashcards = this.props.flashCardList.list.length
+    const loading = this.props.data.loading
+
+    if (loading) {
+      return (
+        <View style={styles.loadingView}>
+          <Text>Loading</Text>
+        </View>
+      )
+    }
+
+    const flashcard = this.props.data.User.flashcards[this.state.flashcardIndex]
+    const numFlashcards = this.props.data.User.flashcards.length
 
     return (
       <View style={styles.container}>
@@ -172,4 +185,4 @@ class PractiseScreen extends Component<
   }
 }
 
-export default PractiseScreen
+export default graphql(flashcardsQuery)(PractiseScreen)

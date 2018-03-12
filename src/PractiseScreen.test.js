@@ -1,18 +1,15 @@
 import 'react-native'
 import React from 'react'
-import PractiseScreen from './PractiseScreen'
-import FlashCard from './FlashCard'
+import {PractiseScreen} from './PractiseScreen'
 
 import renderer from 'react-test-renderer'
 
-const flashCardList = {
-  list: [new FlashCard()],
-}
+jest.mock('react-dom/server', () => {}, {virtual: true})
 
 describe('PractiseScreen', () => {
   test('renders correctly', () => {
     const tree = renderer
-      .create(<PractiseScreen flashCardList={flashCardList} navigation={{}} />)
+      .create(<PractiseScreen data={{loading: true}} navigation={{}} />)
       .toJSON()
     expect(tree).toMatchSnapshot()
   })

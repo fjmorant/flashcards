@@ -1,26 +1,37 @@
-import React, {Component} from 'react'
-import {Text, View, Button, TouchableOpacity, StyleSheet} from 'react-native'
-import List from './common/List'
+import React from 'react'
+import {
+  Text,
+  View,
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native'
 import Swipeout from 'react-native-swipeout'
-import {observer, inject} from 'mobx-react/native'
+import gql from 'graphql-tag'
+import {graphql, compose} from 'react-apollo'
+import {flashcardsQuery, deleteFlashcardMutation} from './queries'
 
 const styles = StyleSheet.create({
   rowContainer: {padding: 8},
   rowText: {
     color: 'rgb(0,0,0)',
   },
+  loadingView: {alignItems: 'center', justifyContent: 'center', flex: 1},
 })
 
-@inject('flashCardList')
-@observer
-class FlashcardsListScreen extends Component<
-  void,
-  {
-    flashCardList: any,
-    navigation: any,
+export class FlashcardsListScreen extends React.Component<{
+  navigation: any,
+  mutate: Function,
+  data: {
+    loading: boolean,
+    refetch: Function,
+    User: {
+      flashcards: Array<any>,
+    },
   },
-  void
-> {
+}> {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Flash Cards',
@@ -36,12 +47,38 @@ class FlashcardsListScreen extends Component<
     }
   }
 
-  renderFlashCard = flashcard => {
+  renderFlashCard = ({item: flashcard}) => {
     const swipeoutBtns = [
       {
         text: 'Delete',
         backgroundColor: 'red',
-        onPress: () => this.props.flashCardList.delete(flashcard.id),
+        onPress: () => {
+          this.props
+            .mutate({
+              variables: {
+                id: flashcard.id,
+              },
+              update: proxy => {
+                const data = proxy.readQuery({query: flashcardsQuery})
+                proxy.writeQuery({
+                  query: flashcardsQuery,
+                  data: {
+                    ...data,
+                    User: {
+                      ...data.User,
+                      flashcards: data.User.flashcards.filter(
+                        item => item.id !== flashcard.id
+                      ),
+                    },
+                  },
+                })
+              },
+            })
+            .catch(error => {
+              console.log(error)
+              alert('Error deleting flashcard')
+            })
+        },
       },
     ]
 
@@ -49,7 +86,7 @@ class FlashcardsListScreen extends Component<
       <Swipeout autoClose right={swipeoutBtns}>
         <TouchableOpacity
             onPress={() =>
-            this.props.navigation.navigate('Add', {id: flashcard.id})
+            this.props.navigation.navigate('Edit', {id: flashcard.id})
           }>
           <View style={styles.rowContainer}>
             <Text style={styles.rowText}>Name : {flashcard.name}</Text>
@@ -64,11 +101,26 @@ class FlashcardsListScreen extends Component<
     )
   }
 
+  _keyExtractor = item => item.id
+
   render() {
+    if (this.props.data.loading) {
+      return (
+        <View style={styles.loadingView}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
+
+    const flashcards = this.props.data.User
+
     return (
       <View>
-        <List
-            items={this.props.flashCardList.list}
+        <FlatList
+            data={this.props.data.User ? this.props.data.User.flashcards : []}
+            keyExtractor={this._keyExtractor}
+            onRefresh={() => this.props.data.refetch()}
+            refreshing={this.props.data.loading}
             renderItem={this.renderFlashCard}
         />
       </View>
@@ -76,4 +128,7 @@ class FlashcardsListScreen extends Component<
   }
 }
 
-export default FlashcardsListScreen
+export default compose(
+  graphql(flashcardsQuery),
+  graphql(deleteFlashcardMutation)
+)(FlashcardsListScreen)
