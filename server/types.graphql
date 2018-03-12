@@ -11,6 +11,7 @@ type File @model {
 
 type Flashcard @model {
   example: String!
+  createdAt: DateTime!
   id: ID! @isUnique
   mastered: Boolean!
   meaning: String!
@@ -24,9 +25,4 @@ type User @model {
   id: ID! @isUnique
   name: String! @isUnique
   updatedAt: DateTime!
-}
-
-
-schema {
-  query: getFlashcardsByUser(user: User!): [Flashcard]!
 }

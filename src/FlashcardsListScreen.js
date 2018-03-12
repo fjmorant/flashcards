@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {
   Text,
   View,
@@ -7,33 +7,10 @@ import {
   StyleSheet,
   FlatList,
 } from 'react-native'
-import List from './common/List'
 import Swipeout from 'react-native-swipeout'
 import gql from 'graphql-tag'
 import {graphql, compose} from 'react-apollo'
-
-const flashcardsQuery = gql`
-  query GetFlashcardsByUser {
-    User(id: "cje8649pvb3u201775435vabn") {
-      name
-      flashcards(orderBy: id_DESC) {
-        id
-        name
-        example
-        mastered
-        meaning
-      }
-    }
-  }
-`
-const deleteFlashcardMutation = gql`
-  mutation DeleteFlashcard($id: ID!) {
-    deleteFlashcard(id: $id) {
-      id
-      name
-    }
-  }
-`
+import {flashcardsQuery, deleteFlashcardMutation} from './queries'
 
 const styles = StyleSheet.create({
   rowContainer: {padding: 8},
@@ -42,14 +19,7 @@ const styles = StyleSheet.create({
   },
 })
 
-class FlashcardsListScreen extends Component<
-  void,
-  {
-    flashCardList: any,
-    navigation: any,
-  },
-  void
-> {
+class FlashcardsListScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Flash Cards',
@@ -66,6 +36,8 @@ class FlashcardsListScreen extends Component<
   }
 
   renderFlashCard = ({item: flashcard}) => {
+    console.log('Render flashcard', flashcard)
+
     const swipeoutBtns = [
       {
         text: 'Delete',
@@ -76,14 +48,21 @@ class FlashcardsListScreen extends Component<
               variables: {
                 id: flashcard.id,
               },
-              refetchQueries: [
-                {
+              update: proxy => {
+                const data = proxy.readQuery({query: flashcardsQuery})
+                proxy.writeQuery({
                   query: flashcardsQuery,
-                },
-              ],
-            })
-            .then(({data}) => {
-              console.log('Success!!!')
+                  data: {
+                    ...data,
+                    User: {
+                      ...data.User,
+                      flashcards: data.User.flashcards.filter(
+                        item => item.id !== flashcard.id
+                      ),
+                    },
+                  },
+                })
+              },
             })
             .catch(error => {
               console.log(error)
@@ -94,64 +73,74 @@ class FlashcardsListScreen extends Component<
     ]
 
     return (
-      <Swipeout autoClose right={swipeoutBtns}>
-        <TouchableOpacity>
-          <View style={styles.rowContainer}>
-            <Text style={styles.rowText}>Name : {flashcard.name}</Text>
-            <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
-            <Text style={styles.rowText}>Example : {flashcard.example}</Text>
-            <Text style={styles.rowText}>
-              Mastered : {(flashcard.mastered || false).toString()}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </Swipeout>
+      <View key={flashcard.id} style={styles.rowContainer}>
+        <Text style={styles.rowText}>Name : {flashcard.name}</Text>
+        <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
+        <Text style={styles.rowText}>Example : {flashcard.example}</Text>
+        <Text style={styles.rowText}>
+          Mastered : {(flashcard.mastered || false).toString()}
+        </Text>
+        <Button
+            onPress={() => {
+            this.props
+              .mutate({
+                variables: {
+                  id: flashcard.id,
+                },
+                optimisticResponse: {
+                  deleteFlashcard: {
+                    id: flashcard.id,
+                    name: flashcard.name,
+                    example: flashcard.example,
+                    meaning: flashcard.meaning,
+                    createdAt: flashcard.createdAt,
+                    __typename: 'Flashcard',
+                  },
+                },
+                update: (proxy, {data: {deleteFlashcard}}) => {
+                  const data = proxy.readQuery({query: flashcardsQuery})
+
+                  data.User.flashcards = data.User.flashcards.filter(
+                    item => item.id !== deleteFlashcard.id
+                  )
+
+                  proxy.writeQuery({
+                    query: flashcardsQuery,
+                    data,
+                  })
+                },
+              })
+              .catch(error => {
+                console.log(error)
+                alert('Error deleting flashcard')
+              })
+          }}
+            title={'Remove'}
+        />
+      </View>
     )
   }
 
   _keyExtractor = item => item.id
 
   render() {
-    const loading = this.props.data.loading
-    const error = this.props.data.error
+    const flashcards = this.props.data.User
+      ? this.props.data.User.flashcards
+      : []
 
-    if (loading) {
-      console.log('Loading')
-      return (
-        <View>
-          <Text>Loading</Text>
-        </View>
-      )
-    }
-
-    if (error) {
-      console.log('Error: ', error)
-      return (
-        <View>
-          <Text>Error found</Text>
-        </View>
-      )
-    }
-
-    const flashcards = this.props.data.User.flashcards
-
-    console.log('Render: ', JSON.stringify(flashcards))
     return (
       <View>
-        {flashcards.map(flashcard => this.renderFlashCard({item: flashcard}))}
+        <FlatList
+            data={this.props.data.User ? this.props.data.User.flashcards : []}
+            keyExtractor={this._keyExtractor}
+            onRefresh={() => this.props.data.refetch()}
+            refreshing={this.props.data.loading}
+            renderItem={this.renderFlashCard}
+        />
       </View>
     )
   }
 }
-
-// <FlatList
-//     data={flashcards}
-//     extraData={{numberFlashcards: this.props.data.User.flashcards.length}}
-//     keyExtractor={this._keyExtractor}
-//     onRefresh={() => this.props.data.refetch()}
-//     refreshing={this.props.data.networkStatus === 4}
-//     renderItem={this.renderFlashCard}
-// />
 
 export default compose(
   graphql(flashcardsQuery),

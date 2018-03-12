@@ -12,6 +12,10 @@ import ModalPicker from './common/ModalPicker'
 import request from 'superagent'
 import {graphql} from 'react-apollo'
 import gql from 'graphql-tag'
+import shortid from 'shortid'
+import moment from 'moment'
+
+import {flashcardsQuery} from './queries'
 
 const styles = StyleSheet.create({
   container: {
@@ -41,27 +45,27 @@ class AddFlashCardScreen extends Component<
     headerRight: null,
   })
 
-  flashcard = new FlashCard()
-
   constructor(props) {
     super()
 
     this.state = {
       modalVisible: false,
       pickerOptions: [],
+      name: '',
+      meaning: '',
+      example: '',
+      mastered: false,
     }
 
-    if (props.navigation.state.params) {
-      this.flashcard = props.flashCardList.getFlashCard(
-        props.navigation.state.params.id
-      )
-    }
+    // if (props.navigation.state.params) {
+    //   this.flashcard = props.flashCardList.getFlashCard(
+    //     props.navigation.state.params.id
+    //   )
+    // }
   }
 
   shouldEnableSaveButton() {
-    return (
-      this.flashcard.name && this.flashcard.meaning && this.flashcard.example
-    )
+    return this.state.name && this.state.meaning && this.state.example
   }
 
   toggleMasterFlashcard = () => {
@@ -71,20 +75,26 @@ class AddFlashCardScreen extends Component<
   }
 
   changeName = (name: string) => {
-    this.flashcard.changeName(name)
+    this.setState({
+      name,
+    })
   }
 
   changeMeaning = (meaning: string) => {
-    this.flashcard.changeMeaning(meaning)
+    this.setState({
+      meaning,
+    })
   }
 
   changeExample = example => {
-    this.flashcard.changeExample(example)
+    this.setState({
+      example,
+    })
   }
 
   onSearchEntryTriggered = () => {
-    if (this.flashcard.name) {
-      const name = this.flashcard.name.toLowerCase()
+    if (this.state.name) {
+      const name = this.state.name.toLowerCase()
 
       request
         .get(`https://wordsapiv1.p.mashape.com/words/${name}`)
@@ -119,8 +129,8 @@ class AddFlashCardScreen extends Component<
     const entryDictionary = this.state.pickerOptions[entry.key]
     const hasExample = entryDictionary.examples && entryDictionary.examples[0]
 
-    this.flashcard.changeMeaning(entryDictionary.definition)
-    this.flashcard.changeExample(hasExample ? entryDictionary.examples[0] : '')
+    this.changeMeaning(entryDictionary.definition)
+    this.changeExample(hasExample ? entryDictionary.examples[0] : '')
 
     this.setState({
       pickerOptions: [],
@@ -138,10 +148,33 @@ class AddFlashCardScreen extends Component<
     this.props
       .mutate({
         variables: {
-          name: this.flashcard.name,
-          meaning: this.flashcard.meaning,
-          example: this.flashcard.example,
+          name: this.state.name,
+          meaning: this.state.meaning,
+          example: this.state.example,
           mastered: false,
+        },
+        update: proxy => {
+          const data = proxy.readQuery({query: flashcardsQuery})
+          const newFlashcards = [{
+            __typename: 'Flashcard',
+            createdAt: moment().toISOString(),
+            id: shortid.generate(),
+            name: this.state.name,
+            meaning: this.state.meaning,
+            example: this.state.example,
+            mastered: false,
+          }, ...data.User.flashcards]
+
+          proxy.writeQuery({
+            query: flashcardsQuery,
+            data: {
+              ...data,
+              User: {
+                ...data.User,
+                flashcards: newFlashcards,
+              },
+            },
+          })
         },
       })
       .then(({data}) => {
@@ -154,7 +187,9 @@ class AddFlashCardScreen extends Component<
   }
 
   render() {
-    const {state: {params = {}}} = this.props.navigation
+    const {state: {params = {}}} = this.props.navigation || {
+      state: {params: {}},
+    }
 
     return (
       <View style={styles.container}>
@@ -177,7 +212,7 @@ class AddFlashCardScreen extends Component<
               placeholder="Type word you want to remember"
               returnKeyType="next"
               style={styles.input}
-              value={this.flashcard.name}
+              value={this.state.name}
           />
           <ReactNativeButton
               onPress={this.onSearchEntryTriggered}
@@ -188,13 +223,13 @@ class AddFlashCardScreen extends Component<
             onChangeText={this.changeMeaning}
             placeholder="Explanation of the word"
             style={styles.input}
-            value={this.flashcard.meaning}
+            value={this.state.meaning}
         />
         <InputArea
             onChangeText={this.changeExample}
             placeholder="Example of your word"
             style={styles.input}
-            value={this.flashcard.example}
+            value={this.state.example}
         />
         <View style={styles.buttonContainer}>
           <Button
@@ -235,6 +270,10 @@ const createNewFlashcard = gql`
       userId: "cje8649pvb3u201775435vabn"
     ) {
       id
+      name
+      meaning
+      example
+      mastered
     }
   }
 `

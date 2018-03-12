@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import FlashcardsListScreen from './FlashcardsListScreen'
 import AddFlashCardScreen from './AddFlashCardScreen'
 import PractiseScreen from './PractiseScreen'
@@ -9,16 +9,13 @@ import {ApolloProvider} from 'react-apollo'
 
 import {StackNavigator} from 'react-navigation'
 
-const BasicApp = StackNavigator(
-  {
-    List: {screen: FlashcardsListScreen},
-    Add: {screen: AddFlashCardScreen},
-    View: {screen: PractiseScreen},
-  },
-  {}
-)
+const BasicApp = StackNavigator({
+  List: {screen: FlashcardsListScreen},
+  Add: {screen: AddFlashCardScreen},
+  View: {screen: PractiseScreen},
+})
 
-export default class App extends Component {
+export default class App extends React.Component {
   constructor(...args) {
     super(...args)
 
@@ -26,7 +23,6 @@ export default class App extends Component {
       link: new HttpLink({
         uri: 'https://api.graph.cool/simple/v1/cje7l288q0wgk0115qob7qdrt',
       }),
-      dataIdFromObject: r => r.id,
       cache: new InMemoryCache(),
     })
   }
