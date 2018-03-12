@@ -73,14 +73,19 @@ class FlashcardsListScreen extends React.Component {
 
     return (
       <Swipeout autoClose right={swipeoutBtns}>
-        <View key={flashcard.id} style={styles.rowContainer}>
-          <Text style={styles.rowText}>Name : {flashcard.name}</Text>
-          <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
-          <Text style={styles.rowText}>Example : {flashcard.example}</Text>
-          <Text style={styles.rowText}>
-            Mastered : {(flashcard.mastered || false).toString()}
-          </Text>
-        </View>
+        <TouchableOpacity
+            onPress={() =>
+            this.props.navigation.navigate('Edit', {id: flashcard.id})
+          }>
+          <View style={styles.rowContainer}>
+            <Text style={styles.rowText}>Name : {flashcard.name}</Text>
+            <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
+            <Text style={styles.rowText}>Example : {flashcard.example}</Text>
+            <Text style={styles.rowText}>
+              Mastered : {(flashcard.mastered || false).toString()}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </Swipeout>
     )
   }

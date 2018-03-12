@@ -1,6 +1,7 @@
 import React from 'react'
 import FlashcardsListScreen from './FlashcardsListScreen'
 import AddFlashCardScreen from './AddFlashCardScreen'
+import EditFlashCardScreen from './EditFlashCardScreen'
 import PractiseScreen from './PractiseScreen'
 import {ApolloClient} from 'apollo-client'
 import {HttpLink} from 'apollo-link-http'
@@ -12,6 +13,7 @@ import {StackNavigator} from 'react-navigation'
 const BasicApp = StackNavigator({
   List: {screen: FlashcardsListScreen},
   Add: {screen: AddFlashCardScreen},
+  Edit: {screen: EditFlashCardScreen},
   View: {screen: PractiseScreen},
 })
 

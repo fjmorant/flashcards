@@ -27,3 +27,64 @@ export const deleteFlashcardMutation = gql`
     }
   }
 `
+
+export const getFlashCardByIdAndUser = gql`
+  query GetFlashcardByIdAndUser($flashCardId: ID!, $userId: ID!) {
+    allFlashcards(filter: {id: $flashCardId, user: {id: $userId}}) {
+      id
+      name
+      example
+      mastered
+      meaning
+      createdAt
+    }
+  }
+`
+
+export const createNewFlashcard = gql`
+  mutation submitNewFlashcard(
+    $name: String!
+    $meaning: String!
+    $example: String!
+    $mastered: Boolean!
+  ) {
+    createFlashcard(
+      name: $name
+      meaning: $meaning
+      example: $example
+      mastered: $mastered
+      userId: "cje8649pvb3u201775435vabn"
+    ) {
+      id
+      name
+      meaning
+      example
+      mastered
+    }
+  }
+`
+
+export const updateFlashcard = gql`
+  mutation editFlashcard(
+    $id: ID!
+    $name: String!
+    $meaning: String!
+    $example: String!
+    $mastered: Boolean!
+  ) {
+    updateFlashcard(
+      id: $id
+      name: $name
+      meaning: $meaning
+      example: $example
+      mastered: $mastered
+      userId: "cje8649pvb3u201775435vabn"
+    ) {
+      id
+      name
+      meaning
+      example
+      mastered
+    }
+  }
+`
