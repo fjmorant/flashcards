@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  ActivityIndicator,
 } from 'react-native'
 import Swipeout from 'react-native-swipeout'
 import gql from 'graphql-tag'
@@ -36,8 +37,6 @@ class FlashcardsListScreen extends React.Component {
   }
 
   renderFlashCard = ({item: flashcard}) => {
-    console.log('Render flashcard', flashcard)
-
     const swipeoutBtns = [
       {
         text: 'Delete',
@@ -73,60 +72,31 @@ class FlashcardsListScreen extends React.Component {
     ]
 
     return (
-      <View key={flashcard.id} style={styles.rowContainer}>
-        <Text style={styles.rowText}>Name : {flashcard.name}</Text>
-        <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
-        <Text style={styles.rowText}>Example : {flashcard.example}</Text>
-        <Text style={styles.rowText}>
-          Mastered : {(flashcard.mastered || false).toString()}
-        </Text>
-        <Button
-            onPress={() => {
-            this.props
-              .mutate({
-                variables: {
-                  id: flashcard.id,
-                },
-                optimisticResponse: {
-                  deleteFlashcard: {
-                    id: flashcard.id,
-                    name: flashcard.name,
-                    example: flashcard.example,
-                    meaning: flashcard.meaning,
-                    createdAt: flashcard.createdAt,
-                    __typename: 'Flashcard',
-                  },
-                },
-                update: (proxy, {data: {deleteFlashcard}}) => {
-                  const data = proxy.readQuery({query: flashcardsQuery})
-
-                  data.User.flashcards = data.User.flashcards.filter(
-                    item => item.id !== deleteFlashcard.id
-                  )
-
-                  proxy.writeQuery({
-                    query: flashcardsQuery,
-                    data,
-                  })
-                },
-              })
-              .catch(error => {
-                console.log(error)
-                alert('Error deleting flashcard')
-              })
-          }}
-            title={'Remove'}
-        />
-      </View>
+      <Swipeout autoClose right={swipeoutBtns}>
+        <View key={flashcard.id} style={styles.rowContainer}>
+          <Text style={styles.rowText}>Name : {flashcard.name}</Text>
+          <Text style={styles.rowText}>Meaning : {flashcard.meaning}</Text>
+          <Text style={styles.rowText}>Example : {flashcard.example}</Text>
+          <Text style={styles.rowText}>
+            Mastered : {(flashcard.mastered || false).toString()}
+          </Text>
+        </View>
+      </Swipeout>
     )
   }
 
   _keyExtractor = item => item.id
 
   render() {
+    if (this.props.data.loading) {
+      return (
+        <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+          <ActivityIndicator />
+        </View>
+      )
+    }
+
     const flashcards = this.props.data.User
-      ? this.props.data.User.flashcards
-      : []
 
     return (
       <View>
