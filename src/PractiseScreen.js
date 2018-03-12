@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
+import {graphql} from 'react-apollo'
+import {flashcardsQuery, deleteFlashcardMutation} from './queries'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -101,7 +104,7 @@ class PractiseScreen extends Component<
   }
 
   componentWillMount() {
-    if (!this.props.flashCardList.list.length) {
+    if (!this.props.data.loading && !this.props.data.User.flashcards.length) {
       const {goBack} = this.props.navigation
 
       goBack()
@@ -116,7 +119,7 @@ class PractiseScreen extends Component<
   }
 
   goNextCard() {
-    const numFlashcards = this.props.flashCardList.list.length
+    const numFlashcards = this.props.data.User.flashcards.length
     const oldIndex = this.state.flashcardIndex
     const flashcardIndex =
       oldIndex < numFlashcards - 1 ? oldIndex + 1 : numFlashcards - 1
@@ -138,8 +141,18 @@ class PractiseScreen extends Component<
 
   render() {
     const {goBack} = this.props.navigation
-    const flashcard = this.props.flashCardList.list[this.state.flashcardIndex]
-    const numFlashcards = this.props.flashCardList.list.length
+    const loading = this.props.data.loading
+
+    if (loading) {
+      return (
+        <View style={{flex: 1}}>
+          <Text>Loading</Text>
+        </View>
+      )
+    }
+
+    const flashcard = this.props.data.User.flashcards[this.state.flashcardIndex]
+    const numFlashcards = this.props.data.User.flashcards.length
 
     return (
       <View style={styles.container}>
@@ -169,4 +182,4 @@ class PractiseScreen extends Component<
   }
 }
 
-export default PractiseScreen
+export default graphql(flashcardsQuery)(PractiseScreen)
