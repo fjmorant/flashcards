@@ -1,21 +1,17 @@
 import 'react-native'
 import React from 'react'
-import AddFlashCardScreen from './AddFlashCardScreen'
-import FlashCard from './FlashCard'
+import {AddFlashCardScreen} from './AddFlashCardScreen'
 
 import renderer from 'react-test-renderer'
 
-const flashCardList = {
-  list: [new FlashCard()],
-  getFlashCard: () => new FlashCard(),
-}
+jest.mock('react-dom/server', () => {}, {virtual: true})
 
 describe('AddFlashCardScreen', () => {
   test('renders correctly', () => {
     const tree = renderer
       .create(
         <AddFlashCardScreen
-            flashCardList={flashCardList}
+            data={{loading: false}}
             navigation={{state: {params: {}}}}
         />
       )

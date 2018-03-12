@@ -5,6 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["dom", "es2015", "es2016", "es2017", "esnext.asynciterable"],
+    "types": ["react", "react-native", "jest"],
     "module": "ES6",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
