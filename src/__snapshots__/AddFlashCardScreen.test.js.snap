@@ -21,7 +21,6 @@ exports[`AddFlashCardScreen renders correctly 1`] = `
       allowFontScaling={true}
       onChangeText={[Function]}
       placeholder="Type word you want to remember"
-      returnKeyType="next"
       style={
         Array [
           Object {
