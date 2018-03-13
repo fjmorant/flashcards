@@ -99,17 +99,17 @@ export interface IProps {
   onChange: (item: any) => void
   onClose: () => void
   initValue: string
-  style: any
-  selectStyle: any
-  optionStyle: any
-  optionTextStyle: any
-  sectionStyle: any
-  sectionTextStyle: any
-  cancelStyle: any
-  cancelTextStyle: any
-  overlayStyle: any
-  cancelText: string
-  selectTextStyle: any
+  style?: any
+  selectStyle?: any
+  optionStyle?: any
+  optionTextStyle?: any
+  sectionStyle?: any
+  sectionTextStyle?: any
+  cancelStyle?: any
+  cancelTextStyle?: any
+  overlayStyle?: any
+  cancelText?: string
+  selectTextStyle?: any
   modalVisible: boolean
 }
 

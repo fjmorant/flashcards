@@ -107,7 +107,7 @@ export class FlashcardsListScreen extends React.Component<{
     if (this.props.data.loading) {
       return (
         <View style={styles.loadingView}>
-          <ActivityIndicator />
+          <ActivityIndicator size={'large'} />
         </View>
       )
     }
