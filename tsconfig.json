@@ -9,6 +9,7 @@
     "module": "ES6",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -16,6 +17,7 @@
     "removeComments": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2015"
+    "target": "es2015",
+    "skipLibCheck": true
   }
 }

@@ -14,7 +14,7 @@ exports[`FlashcardsListScreen renders correctly 1`] = `
     animating={true}
     color="#999999"
     hidesWhenStopped={true}
-    size="small"
+    size="large"
   />
 </View>
 `;

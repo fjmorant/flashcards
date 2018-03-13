@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import * as React from 'react'
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
 
 import {graphql} from 'react-apollo'
-import {flashcardsQuery, deleteFlashcardMutation} from './queries'
+import {flashcardsQuery} from './queries'
 
 const styles = StyleSheet.create({
   container: {
@@ -50,16 +50,17 @@ const styles = StyleSheet.create({
   loadingView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
 })
 
+// tslint:disable-next-line:variable-name
 const FlashCard = ({
   name,
   meaning,
   mode,
   example,
 }: {
-  name: string,
-  meaning: string,
-  mode: string,
-  example: string,
+  name: string
+  meaning: string
+  mode: string
+  example: string
 }) => (
   <View style={styles.flashCardContainer}>
     <View style={styles.flashcardHeaderContainer}>
@@ -78,24 +79,38 @@ const FlashCard = ({
   </View>
 )
 
-const Arrow = ({title, onPress}: {title: string, onPress: any}) => (
+// tslint:disable-next-line:variable-name
+const Arrow = ({title, onPress}: {title: string; onPress: any}) => (
   <TouchableOpacity onPress={onPress}>
     <Text style={styles.arrowText}>{title}</Text>
   </TouchableOpacity>
 )
 
-export class PractiseScreen extends Component<{
-  flashCardList: any,
-  navigation: any,
+export interface IProps {
+  flashCardList: any
+  navigation: any
   data: {
-    loading: boolean,
+    loading: boolean
     User: {
-      flashcards: Array<any>,
-    },
-  },
-}> {
-  constructor() {
-    super()
+      flashcards: Array<any>
+    }
+  }
+}
+
+export interface IState {
+  flashcardIndex: number
+  mode: string
+}
+
+export class PractiseScreen extends React.Component<IProps, IState> {
+  public static navigationOptions = () => {
+    return {
+      header: null,
+    }
+  }
+
+  constructor(props: IProps) {
+    super(props)
 
     this.state = {
       flashcardIndex: 0,
@@ -106,7 +121,7 @@ export class PractiseScreen extends Component<{
     this.switchMode = this.switchMode.bind(this)
   }
 
-  componentWillMount() {
+  public componentWillMount() {
     if (!this.props.data.loading && !this.props.data.User.flashcards.length) {
       const {goBack} = this.props.navigation
 
@@ -115,13 +130,7 @@ export class PractiseScreen extends Component<{
     }
   }
 
-  static navigationOptions = ({navigation, screenProps}) => {
-    return {
-      header: null,
-    }
-  }
-
-  goNextCard() {
+  public goNextCard() {
     const numFlashcards = this.props.data.User.flashcards.length
     const oldIndex = this.state.flashcardIndex
     const flashcardIndex =
@@ -130,19 +139,19 @@ export class PractiseScreen extends Component<{
     this.setState({flashcardIndex})
   }
 
-  goPrevCard() {
+  public goPrevCard() {
     const flashcardIndex = (this.state.flashcardIndex || 1) - 1
 
     this.setState({flashcardIndex})
   }
 
-  switchMode() {
+  public switchMode() {
     this.setState({
       mode: this.state.mode === 'DEFINITION' ? 'EXAMPLE' : 'DEFINITION',
     })
   }
 
-  render() {
+  public render() {
     const {goBack} = this.props.navigation
     const loading = this.props.data.loading
 
@@ -155,7 +164,6 @@ export class PractiseScreen extends Component<{
     }
 
     const flashcard = this.props.data.User.flashcards[this.state.flashcardIndex]
-    const numFlashcards = this.props.data.User.flashcards.length
 
     return (
       <View style={styles.container}>
@@ -166,17 +174,17 @@ export class PractiseScreen extends Component<{
           <Arrow onPress={this.goPrevCard} title={'<'} />
           {flashcard ? (
             <FlashCard
-                example={flashcard.example}
-                meaning={flashcard.meaning}
-                mode={this.state.mode}
-                name={flashcard.name}
+              example={flashcard.example}
+              meaning={flashcard.meaning}
+              mode={this.state.mode}
+              name={flashcard.name}
             />
           ) : null}
           <Arrow onPress={this.goNextCard} title={'>'} />
         </View>
         <Button
-            onPress={this.switchMode}
-            title={
+          onPress={this.switchMode}
+          title={
             this.state.mode === 'DEFINITION' ? 'See Example' : 'See Definition'
           }
         />
@@ -185,4 +193,18 @@ export class PractiseScreen extends Component<{
   }
 }
 
-export default graphql(flashcardsQuery)(PractiseScreen)
+export default graphql<
+  {
+    User: {
+      id: string
+      flashcards: Array<{
+        id: string
+        name: string
+        example: string
+        mastered: boolean
+        meaning: string
+      }>
+    }
+  },
+  any
+>(flashcardsQuery)(PractiseScreen)

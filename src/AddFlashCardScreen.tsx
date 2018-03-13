@@ -1,22 +1,21 @@
-import React, {Component} from 'react'
+import gql from 'graphql-tag'
+import moment from 'moment'
+import * as React from 'react'
+import {graphql} from 'react-apollo'
 import {
   Alert,
   Button as ReactNativeButton,
   StyleSheet,
   View,
-  ActivityIndicator,
 } from 'react-native'
+import * as shortid from 'shortid'
+import * as request from 'superagent'
+import Button from './common/Button'
 import Input from './common/Input'
 import InputArea from './common/InputArea'
-import Button from './common/Button'
 import ModalPicker from './common/ModalPicker'
-import request from 'superagent'
-import {graphql, compose} from 'react-apollo'
-import gql from 'graphql-tag'
-import shortid from 'shortid'
-import moment from 'moment'
 
-import {flashcardsQuery, getFlashCardByIdAndUser} from './queries'
+import {flashcardsQuery} from './queries'
 
 const styles = StyleSheet.create({
   container: {
@@ -32,19 +31,33 @@ const styles = StyleSheet.create({
   buttonContainer: {margin: 5},
 })
 
-export class AddFlashCardScreen extends Component<{
-  navigation: any,
-  flashCardList: any,
-  mastered: boolean,
-  mutate: Function,
-}> {
-  static navigationOptions = () => ({
+export interface IProps {
+  navigation: any
+  flashCardList: any
+  mastered: boolean
+  mutate: any
+}
+
+export interface IState {
+  modalVisible: boolean
+  pickerOptions: Array<{
+    definition: string
+    examples: Array<string>
+  }>
+  name: string
+  meaning: string
+  example: string
+  mastered: boolean
+}
+
+export class AddFlashCardScreen extends React.Component<IProps, IState> {
+  public static navigationOptions = () => ({
     title: 'Add Flash Cards',
     headerRight: null,
   })
 
-  constructor(props) {
-    super()
+  constructor(props: IProps) {
+    super(props)
 
     this.state = {
       modalVisible: false,
@@ -56,35 +69,29 @@ export class AddFlashCardScreen extends Component<{
     }
   }
 
-  shouldEnableSaveButton() {
+  public shouldEnableSaveButton() {
     return this.state.name && this.state.meaning && this.state.example
   }
 
-  toggleMasterFlashcard = () => {
-    this.flashcard.toggleMaster()
-    this.props.flashCardList.edit(this.flashcard)
-    this.props.navigation.goBack()
-  }
-
-  changeName = (name: string) => {
+  public changeName = (name: string) => {
     this.setState({
       name,
     })
   }
 
-  changeMeaning = (meaning: string) => {
+  public changeMeaning = (meaning: string) => {
     this.setState({
       meaning,
     })
   }
 
-  changeExample = example => {
+  public changeExample = (example: string) => {
     this.setState({
       example,
     })
   }
 
-  onSearchEntryTriggered = () => {
+  public onSearchEntryTriggered = () => {
     if (this.state.name) {
       const name = this.state.name.toLowerCase()
 
@@ -117,7 +124,7 @@ export class AddFlashCardScreen extends Component<{
     }
   }
 
-  onSelectMeaningOption = entry => {
+  public onSelectMeaningOption = (entry: {key: number}) => {
     const entryDictionary = this.state.pickerOptions[entry.key]
     const hasExample = entryDictionary.examples && entryDictionary.examples[0]
 
@@ -129,23 +136,23 @@ export class AddFlashCardScreen extends Component<{
     })
   }
 
-  clearPickerOptions = () => {
+  public clearPickerOptions = () => {
     this.setState({
       pickerOptions: [],
       modalVisible: false,
     })
   }
 
-  onPressSaveButton = () => {
-    this.props
-      .mutate({
+  public onPressSaveButton = async () => {
+    try {
+      await this.props.mutate({
         variables: {
           name: this.state.name,
           meaning: this.state.meaning,
           example: this.state.example,
           mastered: false,
         },
-        update: proxy => {
+        update: (proxy: any) => {
           const data = proxy.readQuery({query: flashcardsQuery})
           const newFlashcards = [
             {
@@ -172,62 +179,61 @@ export class AddFlashCardScreen extends Component<{
           })
         },
       })
-      .then(({data}) => {
-        this.props.navigation.goBack()
-      })
-      .catch(error => {
-        console.log(error)
-        alert('Error saving flashcard')
-      })
+
+      this.props.navigation.goBack()
+    } catch (error) {
+      // tslint:disable-next-line:no-console
+      console.log(error)
+      alert('Error saving flashcard')
+    }
   }
 
-  render() {
+  public render() {
     return (
       <View style={styles.container}>
-        {this.state.pickerOptions.size > 0 ? (
+        {this.state.pickerOptions.length > 0 ? (
           <ModalPicker
-              data={this.state.pickerOptions.map((result, index) => ({
+            data={this.state.pickerOptions.map((result, index) => ({
               key: index,
               label: result.definition,
             }))}
-              initValue="Select part speech"
-              modalVisible={this.state.modalVisible}
-              onChange={this.onSelectMeaningOption}
-              onClose={this.clearPickerOptions}
+            initValue="Select part speech"
+            modalVisible={this.state.modalVisible}
+            onChange={this.onSelectMeaningOption}
+            onClose={this.clearPickerOptions}
           />
         ) : null}
         <View style={styles.inputContainer}>
           <Input
-              height={35}
-              onChangeText={this.changeName}
-              placeholder="Type word you want to remember"
-              returnKeyType="next"
-              style={styles.input}
-              value={this.state.name}
+            height={35}
+            onChangeText={this.changeName}
+            placeholder="Type word you want to remember"
+            style={styles.input}
+            value={this.state.name}
           />
           <ReactNativeButton
-              onPress={this.onSearchEntryTriggered}
-              title={'Find'}
+            onPress={this.onSearchEntryTriggered}
+            title={'Find'}
           />
         </View>
         <InputArea
-            onChangeText={this.changeMeaning}
-            placeholder="Explanation of the word"
-            style={styles.input}
-            value={this.state.meaning}
+          onChangeText={this.changeMeaning}
+          placeholder="Explanation of the word"
+          style={styles.input}
+          value={this.state.meaning}
         />
         <InputArea
-            onChangeText={this.changeExample}
-            placeholder="Example of your word"
-            style={styles.input}
-            value={this.state.example}
+          onChangeText={this.changeExample}
+          placeholder="Example of your word"
+          style={styles.input}
+          value={this.state.example}
         />
         <View style={styles.buttonContainer}>
           <Button
-              disabled={!this.shouldEnableSaveButton()}
-              height={40}
-              onPress={this.onPressSaveButton}
-              title="Save"
+            disabled={!this.shouldEnableSaveButton()}
+            height={40}
+            onPress={this.onPressSaveButton}
+            title="Save"
           />
         </View>
       </View>
@@ -258,4 +264,13 @@ const createNewFlashcard = gql`
   }
 `
 
-export default graphql(createNewFlashcard)(AddFlashCardScreen)
+export default graphql<
+  {
+    id: string
+    name: string
+    meaning: string
+    example: string
+    mastered: boolean
+  },
+  IProps
+>(createNewFlashcard)(AddFlashCardScreen)

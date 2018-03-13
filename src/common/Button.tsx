@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 export interface IProps {
   disabled: boolean
   title: string
-  titleSize: number
+  titleSize?: number
   height: number
   onPress?: () => void
 }
