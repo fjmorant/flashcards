@@ -28,7 +28,7 @@
     "react-native-vector-icons": "4.5.0",
     "react-navigation": "1.5.2",
     "shortid": "2.2.8",
-    "superagent": "3.8.2"
+    "superagent": "3.8.3"
   },
   "devDependencies": {
     "@types/jest": "22.2.0",
