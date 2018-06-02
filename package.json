@@ -45,7 +45,7 @@
     "flow-bin": "0.67.1",
     "jest": "22.4.2",
     "jest-fetch-mock": "^1.4.2",
-    "prettier": "1.11.1",
+    "prettier": "1.13.4",
     "prettier-check": "2.0.0",
     "pretty-format": "22.4.0",
     "react-native-typescript-transformer": "1.2.3",
